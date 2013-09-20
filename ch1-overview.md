@@ -1,12 +1,6 @@
 netty那点事-概述
 -----
 
-一直都听说netty或者mina很牛逼，是Java世界通讯框架的倚天剑屠龙刀，近年来大有一统江湖的趋势。netty和mina两个都出自一个大师之手，Mina诞生略早，早已是武林正统apache的门客，而netty开始在另一大帮派-Jboss门下，后来出来自立门户netty.io。关于mina已有@FrankHui的[Mina系列文章](http://my.oschina.net/ielts0909/blog/92716)，我就斗胆来写一份netty攻略，来分享给各位江湖猿友了。
-
-学习netty，必须先修得Java内功，并发和NIO两门内功自然是必不可少的，不然大侠还是重新来过吧。如果还有一些TCP/IP的修为，那是再好不过了。
-
-netty目前有两个分支，4.x和3.x。4.0分支重写了很多东西，并对项目进行了分包，规模比较庞大，入手会困难一些，而3.x版本则已经被广泛使用。3.x和4.0的区别可以参考这篇文章：[http://www.oschina.net/translate/netty-4-0-new-and-noteworthy?print](http://www.oschina.net/translate/netty-4-0-new-and-noteworthy?print)。本系列文章针对netty 3.7.0 final。
-
 ## 起：netty是什么
 
 大概用netty的，无论新手还是高手，都知道它是一个“异步通讯框架”。所谓框架，基本上都是一个作用：基于底层API，提供更便捷的编程模型。那么"通讯框架"到底做了什么事情呢？回答这个问题并不太容易，我们不妨反过来看看，不使用netty，直接基于NIO编写网络程序，你需要做什么(以Server端TCP连接为例，这里我们使用Reactor模型)：
@@ -33,7 +27,7 @@ netty目前有两个分支，4.x和3.x。4.0分支重写了很多东西，并对
 
 ## 承：netty的使用体验
 
-以example里的EchoServer为例，其主要代码如下：
+这里我们引用netty的example包里的一个例子，一个简单的EchoServer，它接受客户端输入，并将输入原样返回。其主要代码如下：
 
 ```java
     public void run() {
@@ -69,7 +63,7 @@ netty目前有两个分支，4.x和3.x。4.0分支重写了很多东西，并对
 	}
 ```
 	
-还是挺简单的，不是吗？	
+还是挺简单的，不是吗？
 
 ## 转：如何实现
 
