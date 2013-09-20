@@ -1,7 +1,7 @@
 netty那点事-概述
 -----
 
-一直都听说netty或者mina很牛逼，是Java世界通讯框架的倚天剑屠龙刀，大有“号令天下，莫敢不从”的意思。netty和mina两个都出自一个大师之手，Mina诞生略早，早已是武林正统apache的门客，而netty开始在另一大帮派-Jboss门下，后来出来自立门户netty.io。关于mina已有@FrankHui的[Mina系列文章](http://my.oschina.net/ielts0909/blog/92716)，我就斗胆来写一份netty攻略，来分享给各位江湖猿友了。
+一直都听说netty或者mina很牛逼，是Java世界通讯框架的倚天剑屠龙刀，大有一统江湖的意思。netty和mina两个都出自一个大师之手，Mina诞生略早，早已是武林正统apache的门客，而netty开始在另一大帮派-Jboss门下，后来出来自立门户netty.io。关于mina已有@FrankHui的[Mina系列文章](http://my.oschina.net/ielts0909/blog/92716)，我就斗胆来写一份netty攻略，来分享给各位江湖猿友了。
 
 学习netty，必须先修得Java内功，并发和NIO两门内功自然是必不可少的，不然大侠还是重新来过吧。如果还有一些TCP/IP的修为，那是再好不过了。
 
@@ -28,20 +28,52 @@ netty目前有两个分支，4.x和3.x。4.0分支重写了很多东西，并对
 3. 维护多个连接后，每次通讯，需要选择某一可用连接
 4. 连接超时和关闭机制
 
-而使用netty之后，你只需要关注逻辑处理部分就可以了。
-
-### 连接管理和复用
-
-建立TCP连接需要成本，保持连接才比较高效的做法。但是如果手动管理连接，就比较麻烦。
-
-处理机制。
-
-线程管理和复用
+想想就觉得很复杂了！实际上，基于NIO直接实现这部分东西，即使是老手也容易出现错误，而使用netty之后，你只需要关注逻辑处理部分就可以了。
 
 
+## 承：netty的使用体验
 
-## 承：netty的结构
+以example里的EchoServer为例，其主要代码如下：
 
+```java
+    public void run() {
+        // Configure the server.
+        ServerBootstrap bootstrap = new ServerBootstrap(
+                new NioServerSocketChannelFactory(
+                        Executors.newCachedThreadPool(),
+                        Executors.newCachedThreadPool()));
+
+        // Set up the pipeline factory.
+        bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+            public ChannelPipeline getPipeline() throws Exception {
+                return Channels.pipeline(new EchoServerHandler());
+            }
+        });
+
+        // Bind and start to accept incoming connections.
+        bootstrap.bind(new InetSocketAddress(port));
+    }
+```
+
+这里`EchoServerHandler`是其业务逻辑的实现者，大致代码如下：
+
+```java
+	public class EchoServerHandler extends SimpleChannelUpstreamHandler {
+
+	    @Override
+	    public void messageReceived(
+	            ChannelHandlerContext ctx, MessageEvent e) {
+	        // Send back the received message to the remote peer.
+	        e.getChannel().write(e.getMessage());
+	    }
+	}
+```
+	
+还是挺简单的，不是吗？	
+
+## 转：如何实现
+
+## 合：开启netty源码之门
 Java世界的框架大多追求大而全，如果逐个阅读，难免迷失方向，鄙人以为，抓住几个重点对象，理解其领域概念，从而理清其脉络，相当于打通了任督二脉，以后的阅读就不再困难了。等到
 
 对代码的第一印象来看，netty的作者大概是“重复发明轮子”教的教主，netty有一半以上的类，都是跟JDK的概念直接对应，甚至连名字都不曾修改。例如NIO的两大组件：Buffer和Channel，netty里分别有两个包`io.netty.buffer`和`io.netty.channel`来对应；而并发框架的ExecutorService，netty也有类似的概念`EventExecutor`。
@@ -55,37 +87,3 @@ EventExecutorGroup
 ChannelPipeline
 
 ChannelHandler
-
-
-
-## 转：
-
-## 合：
-
-
-多线程及线程管理
-
-NIO 
-
-连接及连接管理
-
-协议解析
-
-有了这些还不行，你还必须得封装一套简便的API给使用者，要不然怎么叫框架呢？
-
-
-
-Channel
-
-EventExecutor
-
-ChannelPipeline
-
-ChannelHandler
-
-只记得几个名字，除了在面试时忽悠忽悠，是没有任何意义的。
-
-netty做了NIO之外的事：
-
------------------
-
