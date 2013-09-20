@@ -9,7 +9,7 @@ netty目前有两个分支，4.x和3.x。4.0分支重写了很多东西，并对
 
 ## 提纲
 
-### 1.概述
+### 1.[概述](https://github.com/code4craft/netty-leanring/blob/master/ch1-overview.md)
 ### 2.Buffer
 ### 3.Channel
 ### 4.ChannelHandler及Pipeline
