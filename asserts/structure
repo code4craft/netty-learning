@@ -1,69 +1,10 @@
-├── bootstrap
-├── buffer
-├── channel
-│   ├── group
-│   ├── local
-│   └── socket
-│       ├── http
-│       ├── nio
-│       ├── oio
-├── container
-│   ├── microcontainer
-│   ├── osgi
-│   └── spring
-├── example
-│   ├── discard
-│   ├── echo
-│   ├── factorial
-│   ├── http
-│   │   ├── file
-│   │   ├── snoop
-│   │   ├── tunnel
-│   │   ├── upload
-│   │   └── websocketx
-│   │       ├── autobahn
-│   │       ├── client
-│   │       ├── html5
-│   │       ├── server
-│   │       └── sslserver
-│   ├── local
-│   ├── localtime
-│   │   ├── LocalTimeProtocol.proto
-│   ├── objectecho
-│   ├── portunification
-│   ├── proxy
-│   ├── qotm
-│   ├── securechat
-│   ├── telnet
-│   └── uptime
-├── handler
-│   ├── codec
-│   │   ├── base64
-│   │   ├── compression
-│   │   ├── embedder
-│   │   ├── frame
-│   │   ├── http
-│   │   │   ├── multipart
-│   │   │   ├── websocket
-│   │   │   └── websocketx
-│   │   ├── marshalling
-│   │   ├── oneone
-│   │   ├── protobuf
-│   │   ├── replay
-│   │   ├── rtsp
-│   │   ├── serialization
-│   │   ├── socks
-│   │   ├── spdy
-│   │   └── string
-│   ├── execution
-│   ├── ipfilter
-│   ├── logging
-│   ├── queue
-│   ├── ssl
-│   ├── stream
-│   ├── timeout
-│   └── traffic
-├── logging
-└── util
-    ├── internal
-    │   ├── jzlib
+├── bootstrap 配置并启动服务的类
+├── buffer 缓冲相关类，对NIO Buffer做了一些封装
+├── channel 核心部分，处理连接
+├── container 连接其他容器的代码
+├── example 使用示例
+├── handler 基于handler的扩展部分，实现协议编解码等附加功能
+├── logging 日志
+└── util 工具类
+
+

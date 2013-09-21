@@ -82,8 +82,21 @@ Netty那点事（一）Netty概述
 
 ## 合：开启Netty源码之门
 
-理解了Netty的事件驱动机制，我们现在可以来研究Netty的各个模块了：
+理解了Netty的事件驱动机制，我们现在可以来研究Netty的各个模块了。Netty的包结构如下：
 
+```shell
+	org
+	└── jboss
+	    └── netty
+			├── bootstrap 配置并启动服务的类
+			├── buffer 缓冲相关类，对NIO Buffer做了一些封装
+			├── channel 核心部分，处理连接
+			├── container 连接其他容器的代码
+			├── example 使用示例
+			├── handler 基于handler的扩展部分，实现协议编解码等附加功能
+			├── logging 日志
+			└── util 工具类
+```
 
 
 参考资料：
@@ -91,4 +104,4 @@ Netty那点事（一）Netty概述
 * What is Netty? [http://ayedo.github.io/netty/2013/06/19/what-is-netty.html](http://ayedo.github.io/netty/2013/06/19/what-is-netty.html)
 
   [1]: http://static.oschina.net/uploads/space/2013/0921/174032_18rb_190591.png
-
+  [2]: http://static.oschina.net/uploads/space/2013/0921/215238_FCOn_190591.png
