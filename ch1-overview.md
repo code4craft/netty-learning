@@ -84,7 +84,6 @@ Netty那点事（一）Netty概述
 
 理解了Netty的事件驱动机制，我们现在可以来研究Netty的各个模块了。Netty的包结构如下：
 
-```shell
 	org
 	└── jboss
 	    └── netty
@@ -96,12 +95,30 @@ Netty那点事（一）Netty概述
 			├── handler 基于handler的扩展部分，实现协议编解码等附加功能
 			├── logging 日志
 			└── util 工具类
-```
 
+在这里面，`channel`和`handler`两部分比较复杂。我们不妨与Netty官方的结构图对照一下，来了解其功能。
+
+![components in Netty][2]
+
+具体的解释可以看这里：[http://netty.io/3.7/guide/#architecture](http://netty.io/3.7/guide/#architecture)。图中可以看到，除了之前说到的事件驱动机制之外，Netty的核心功能还包括两部分：
+
+* Zero-Copy-Capable Rich Byte Buffer
+
+	零拷贝的Buffer。为什么叫零拷贝？因为在数据传输时，最终处理的数据会需要对单个传输层的报文，进行组合或者拆分。NIO原生的ByteBuffer无法做到这件事，而Netty通过提供Composite(组合)和Slice(切分)两种Buffer来实现零拷贝。这部分代码在`org.jboss.netty.buffer`包中。
+
+* Universal Communication API
+	
+	统一的通讯API。这个是针对Java的Old I/O和New I/O，使用了不同的API而言。Netty则提供了统一的API(`org.jboss.netty.channel.Channel`)来封装这两种I/O模型。这部分代码在`org.jboss.netty.channel`包中。
+	
+此外，Protocol Support功能通过handler机制实现。
+
+接下来的文章，我们会根据模块，详细的对Netty源码进行分析。
 
 参考资料：
+
+* Netty 3.7 User Guide [http://netty.io/3.7/guide/](http://netty.io/3.7/guide/)
 
 * What is Netty? [http://ayedo.github.io/netty/2013/06/19/what-is-netty.html](http://ayedo.github.io/netty/2013/06/19/what-is-netty.html)
 
   [1]: http://static.oschina.net/uploads/space/2013/0921/174032_18rb_190591.png
-  [2]: http://static.oschina.net/uploads/space/2013/0921/215238_FCOn_190591.png
+  [2]: http://static.oschina.net/uploads/space/2013/0921/225721_R0w2_190591.png
