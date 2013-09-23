@@ -1,9 +1,12 @@
-Netty那点事（一）Netty概述
+Netty那点事（一）概述
 -----
+Netty和Mina是Java世界通讯框架的首选。它们都出自同一个作者，Mina诞生略早，属于Apache基金会，而Netty开始在Jboss名下，后来出来自立门户netty.io。关于Mina已有@FrankHui的[Mina系列文章](http://my.oschina.net/ielts0909/blog/92716)，我正好最近也要做一些网络方面的开发，就研究一下Netty的源码，顺便分享出来了。
+
+Netty目前有两个分支：4.x和3.x。4.0分支重写了很多东西，并对项目进行了分包，规模比较庞大，入手会困难一些，而3.x版本则已经被广泛使用。本系列文章针对netty 3.7.0 final。3.x和4.0的区别可以参考这篇文章：[http://www.oschina.net/translate/netty-4-0-new-and-noteworthy?print](http://www.oschina.net/translate/netty-4-0-new-and-noteworthy?print)。
 
 ## 起：Netty是什么
 
-大概用Netty的，无论新手还是高手，都知道它是一个“网络通讯框架”。所谓框架，基本上都是一个作用：基于底层API，提供更便捷的编程模型。那么"通讯框架"到底做了什么事情呢？回答这个问题并不太容易，我们不妨反过来看看，不使用netty，直接基于NIO编写网络程序，你需要做什么(以Server端TCP连接为例，这里我们使用Reactor模型)：
+大概用Netty的，无论新手还是老手，都知道它是一个“网络通讯框架”。所谓框架，基本上都是一个作用：基于底层API，提供更便捷的编程模型。那么"通讯框架"到底做了什么事情呢？回答这个问题并不太容易，我们不妨反过来看看，不使用netty，直接基于NIO编写网络程序，你需要做什么(以Server端TCP连接为例，这里我们使用Reactor模型)：
 
 1. 监听端口，建立Socket连接
 2. 建立线程，处理内容
@@ -25,7 +28,7 @@ Netty那点事（一）Netty概述
 想想就觉得很复杂了！实际上，基于NIO直接实现这部分东西，即使是老手也容易出现错误，而使用Netty之后，你只需要关注逻辑处理部分就可以了。
 
 
-## 承：体验Netty的使用
+## 承：体验Netty
 
 这里我们引用Netty的example包里的一个例子，一个简单的EchoServer，它接受客户端输入，并将输入原样返回。其主要代码如下：
 
