@@ -218,6 +218,6 @@ DynamicChannelBuffer是一个很方便的Buffer，之所以叫Dynamic是因为�
 
 参考资料：
 
-* [http://zh.wikipedia.org/zh-cn/TCP/IP%E5%8D%8F%E8%AE%AE](http://zh.wikipedia.org/zh-cn/TCP/IP%E5%8D%8F%E8%AE%AE)
+* TCP/IP协议 [http://zh.wikipedia.org/zh-cn/TCP/IP%E5%8D%8F%E8%AE%AE](http://zh.wikipedia.org/zh-cn/TCP/IP%E5%8D%8F%E8%AE%AE)
 * Data_buffer [http://en.wikipedia.org/wiki/Data_buffer](http://en.wikipedia.org/wiki/Data_buffer)
 * Endianness [http://en.wikipedia.org/wiki/Endianness](http://en.wikipedia.org/wiki/Endianness)
