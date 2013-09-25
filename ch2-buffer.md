@@ -100,7 +100,7 @@ TCP报文有个比较大的特点，就是它传输的时候，会先把应用�
 
 我倒是觉得这样的方式非常自然，比单指针与flip()要更加好理解一些。AbstactChannelBuffer还有两个相应的mark指针`markedReaderIndex`和`markedWriterIndex`，跟NIO的原理是一样的，这里不再赘述了。
 
-### 字节序Endianness与BigEndianHeapChannelBuffer/LittleEndianHeapChannelBuffer
+### 字节序Endianness与HeapChannelBuffer
 
 在创建Buffer时，我们注意到了这样一个方法：`public static ChannelBuffer buffer(ByteOrder endianness, int capacity);`，其中`ByteOrder`是什么意思呢？
 
