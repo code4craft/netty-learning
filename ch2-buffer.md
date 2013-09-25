@@ -1,4 +1,4 @@
-Netty那点事（二）-Netty中的buffer
+Netty那点事（二）Netty中的buffer
 --------
 
 上一篇文章我们概要介绍了Netty的原理及结构，下面几篇文章我们开始对Netty的各个模块进行比较详细的分析。Netty的结构最底层是buffer机制，这部分也相对独立，我们就先从buffer讲起。
