@@ -64,8 +64,6 @@ TCP报文有个比较大的特点，就是它传输的时候，会先把应用�
 
 好了，终于来到了代码实现部分。之所以啰嗦了这么多，因为我觉得，关于"Zero-Copy-Capable Rich Byte Buffer"，理解为什么需要它，比理解它是怎么实现的，可能要更重要一点。
 
-关于实现方面，Netty 3.7的buffer相关内容还是比较简单的，也没有太多费脑细胞的地方。
-
 我想可能很多朋友跟我一样，喜欢"顺藤摸瓜"式读代码--找到一个入口，然后顺着查看它的调用，直到理解清楚。很幸运，`ChannelBuffers`(注意有s!)就是这样一根"藤"，它是所有ChannelBuffer实现类的入口，它提供了很多静态的工具方法来创建不同的Buffer，靠“顺藤摸瓜”式读代码方式，大致能把各种ChannelBuffer的实现类摸个遍。先列一下ChannelBuffer相关类图。
 
 ![channel buffer in Netty][1]
@@ -185,13 +183,14 @@ DynamicChannelBuffer是一个很方便的Buffer，之所以叫Dynamic是因为�
     </tr>
     <tr>
         <td width="100">SlicedChannelBuffer</td>
-        <td>ChannelBuffer.slice()
+        <td>ChannelBuffer.slice()<br>
         ChannelBuffer.slice(int,int)</td>
         <td>某个ChannelBuffer的一部分</td>
     </tr>
     <tr>
         <td width="100">TruncatedChannelBuffer</td>
-        <td>ChannelBuffer.slice()</td>
+        <td>ChannelBuffer.slice()<br>        
+        ChannelBuffer.slice(int,int)</td>
         <td>某个ChannelBuffer的一部分，
        	可以理解为其实位置为0的SlicedChannelBuffer</td>
     </tr>
@@ -208,7 +207,9 @@ DynamicChannelBuffer是一个很方便的Buffer，之所以叫Dynamic是因为�
     </tr>
 </table>
 
-4.0之后ChannelBuffer改名ByteBuf，成了单独项目，为了性能优化，加入了BufferPool之类的机制，已经变得比较复杂了，但是本质倒没怎么变。性能优化是个很复杂的事情，研究源码时，建议先避开这些东西，除非你对算法情有独钟。举个例子，Netty4.0里为了优化，将Map换成了Java 8里6000行的[ConcurrentHashMapV8](https://github.com/netty/netty/blob/master/common/src/main/java/io/netty/util/internal/chmv8/ConcurrentHashMapV8.java)，你们感受一下…
+可以看到，关于实现方面，Netty 3.7的buffer相关内容还是比较简单的，也没有太多费脑细胞的地方。
+
+而Netty 4.0之后就不同了。4.0，ChannelBuffer改名ByteBuf，成了单独项目buffer，并且为了性能优化，加入了BufferPool之类的机制，已经变得比较复杂了(本质倒没怎么变)。性能优化是个很复杂的事情，研究源码时，建议先避开这些东西，除非你对算法情有独钟。举个例子，Netty4.0里为了优化，将Map换成了Java 8里6000行的[ConcurrentHashMapV8](https://github.com/netty/netty/blob/master/common/src/main/java/io/netty/util/internal/chmv8/ConcurrentHashMapV8.java)，你们感受一下…
 
   [1]: http://static.oschina.net/uploads/space/2013/0925/081551_v8pK_190591.png
   [2]: http://static.oschina.net/uploads/space/2013/0925/074748_oSkl_190591.png
