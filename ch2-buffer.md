@@ -5,9 +5,9 @@ Netty那点事（二）-Netty中的buffer
 
 ## What：buffer二三事
 
-buffer中文名又叫缓冲区，按照维基百科的解释，是"在数据传输时，在内存里开辟的一块临时保存数据的区域"。它其实是一种化同步为异步的机制，可以解决数据传输的速率不对等以及不稳定的问题。根据这个定义，我们可以知道涉及I/O(特别是I/O写)的地方必然会有Buffer了！
+buffer中文名又叫缓冲区，按照维基百科的解释，是"在数据传输时，在内存里开辟的一块临时保存数据的区域"。它其实是一种化同步为异步的机制，可以解决数据传输的速率不对等以及不稳定的问题。
 
-实际上也没错，就Java来说，我们非常熟悉的Old I/O--`InputStream`&`OutputStream`系列API，基本都是在内部使用到了buffer。Java课程老师就教过，必须调用`OutputStream.flush()`，才能保证数据写入生效！
+根据这个定义，我们可以知道涉及I/O(特别是I/O写)的地方，基本会有Buffer了。就Java来说，我们非常熟悉的Old I/O--`InputStream`&`OutputStream`系列API，基本都是在内部使用到了buffer。Java课程老师就教过，必须调用`OutputStream.flush()`，才能保证数据写入生效！
 
 而NIO中则直接将buffer这个概念封装成了对象，其中最常用的大概是ByteBuffer了。于是使用方式变为了：将数据写入Buffer，flip()一下，然后将数据读出来。于是，buffer的概念更加深入人心了！
 
@@ -169,18 +169,50 @@ DynamicChannelBuffer是一个很方便的Buffer，之所以叫Dynamic是因为�
 
 ### ByteBufferBackedChannelBuffer
 
-前面说ChannelBuffer是自己的实现的，其实只说对了一半。`ByteBufferBackedChannelBuffer`就是封装了NIO ByteBuffer的类，用于实现堆外内存的Buffer(使用NIO的`DirectByteBuffer`)。当然，其实它也可以放其他的ByteBuffer的实现类。
+前面说ChannelBuffer是自己的实现的，其实只说对了一半。`ByteBufferBackedChannelBuffer`就是封装了NIO ByteBuffer的类，用于实现堆外内存的Buffer(使用NIO的`DirectByteBuffer`)。当然，其实它也可以放其他的ByteBuffer的实现类。代码实现就不说了，也没啥可说的。
 
 ### WrappedChannelBuffer
 
 ![virtual buffer in Netty][2]
 
+`WrappedChannelBuffer`都是几个对已有ChannelBuffer进行包装，完成特定功能的类。代码不贴了，实现都比较简单，列一下功能吧。
+
+<table>
+    <tr>
+        <td width="100">类名</td>
+        <td width="100">入口</td>
+        <td>功能</td>
+    </tr>
+    <tr>
+        <td width="100">SlicedChannelBuffer</td>
+        <td>ChannelBuffer.slice()
+        ChannelBuffer.slice(int,int)</td>
+        <td>某个ChannelBuffer的一部分</td>
+    </tr>
+    <tr>
+        <td width="100">TruncatedChannelBuffer</td>
+        <td>ChannelBuffer.slice()</td>
+        <td>某个ChannelBuffer的一部分，
+       	可以理解为其实位置为0的SlicedChannelBuffer</td>
+    </tr>
+    <tr>
+        <td width="100">DuplicatedChannelBuffer</td>
+        <td>ChannelBuffer.duplicate()</td>
+        <td>与某个ChannelBuffer使用同样的存储，
+        区别是有自己的index</td>
+    </tr>
+    <tr>
+        <td width="100">ReadOnlyChannelBuffer</td>
+        <td>ChannelBuffers.unmodifiableBuffer(ChannelBuffer)</td>
+        <td>只读，你懂的</td>
+    </tr>
+</table>
 
 4.0之后ChannelBuffer改名ByteBuf，成了单独项目，为了性能优化，加入了BufferPool之类的机制，已经变得比较复杂了，但是本质倒没怎么变。性能优化是个很复杂的事情，研究源码时，建议先避开这些东西，除非你对算法情有独钟。举个例子，Netty4.0里为了优化，将Map换成了Java 8里6000行的[ConcurrentHashMapV8](https://github.com/netty/netty/blob/master/common/src/main/java/io/netty/util/internal/chmv8/ConcurrentHashMapV8.java)，你们感受一下…
 
   [1]: http://static.oschina.net/uploads/space/2013/0925/081551_v8pK_190591.png
   [2]: http://static.oschina.net/uploads/space/2013/0925/074748_oSkl_190591.png
-  [3]: http://netty.io/3.7/guide/images/combine-slice-buffer.png
+  [3]: http://static.oschina.net/uploads/space/2013/0925/225747_kDAk_190591.png
   
 
 参考资料：
