@@ -1,54 +1,76 @@
 Netty那点事（二）-Netty中的buffer
 --------
->尚未完成
 
-上一篇文章我们概要介绍了Netty的原理及结构，下面几篇文章我们开始对Netty的各个模块进行比较详细的分析。Netty的结构最底层是Buffer机制，这部分也相对独立，我们就先从Buffer讲起。
+上一篇文章我们概要介绍了Netty的原理及结构，下面几篇文章我们开始对Netty的各个模块进行比较详细的分析。Netty的结构最底层是buffer机制，这部分也相对独立，我们就先从buffer讲起。
 
-## What：Buffer二三事
+## What：buffer二三事
 
-Buffer中文名又叫缓冲区，
+buffer中文名又叫缓冲区，按照维基百科的解释，是"在数据传输时，在内存里开辟的一块临时保存数据的区域"。它其实是一种化同步为异步的机制，可以解决数据传输的速率不对等以及不稳定的问题。根据这个定义，我们可以知道涉及I/O(特别是I/O写)的地方必然会有Buffer了！
 
-NIO中的ByteBuffer。
+实际上也没错，就Java来说，我们非常熟悉的Old I/O--`InputStream`&`OutputStream`系列API，基本都是在内部使用到了buffer。Java课程老师就教过，必须调用`OutputStream.flush()`，才能保证数据写入生效！
 
-关于ByteBuffer的吐槽：[http://www.javacodegeeks.com/2012/12/the-java-bytebuffer-a-crash-course.html](http://www.javacodegeeks.com/2012/12/the-java-bytebuffer-a-crash-course.html)
+而NIO中则直接将buffer这个概念封装成了对象，其中最常用的大概是ByteBuffer了。于是使用方式变为了：将数据写入Buffer，flip()一下，然后将数据读出来。于是，buffer的概念更加深入人心了！
 
-## When & Where：TCP/IP协议与Buffer
+Netty中的buffer也不例外。不同的是，Netty的buffer专为网络通讯而生，所以它又叫ChannelBuffer(好吧其实没有什么因果关系…)。我们下面就来讲讲Netty中得buffer。当然，关于Netty，我们必须讲讲它的所谓"Zero-Copy-Capable"机制。
 
-MTU与Nagle算法
+## When & Where：TCP/IP协议与buffer
+
+TCP/IP协议是目前的主流网络协议。它是一个多层协议，最下层是物理层，最上层是应用层(HTTP协议等)，而我们Java程序员，一般只接触TCP以上，即传输层和应用层的内容。这也是Netty的主要应用场景。
+
+TCP报文有个比较大的特点，就是它传输的时候，会先把应用层的数据项拆开成字节，然后按照自己的传输需要，选择合适数量的字节进行传输。什么叫"自己的传输需要"？首先TCP包有最大长度限制，那么太大的数据项肯定是要拆开的。其次因为TCP以及下层协议会附加一些协议头信息，如果数据项太小，那么可能报文大部分都是没有价值的头信息，这样传输是很不划算的。因此有了收集一定数量的小数据，并打包传输的Nagle算法(这个东东在HTTP协议里会很讨厌，Netty里可以用setOption("tcpNoDelay", true)关掉它)。
+
+这么说可能太学院派了一点，我们举个例子吧：
+
+发送时，我们这样分3次写入('|'表示两个buffer的分隔):
+
+	   +-----+-----+-----+
+	   | ABC | DEF | GHI |
+	   +-----+-----+-----+
+
+接收时，可能变成了这样:
+
+	   +----+-------+---+---+
+	   | AB | CDEFG | H | I |
+	   +----+-------+---+---+
+
+很好懂吧？可是，说了这么多，跟buffer有个什么关系呢？别急，我们来看下面一部分。
 
 ## Why：Buffer中的分层思想
 
-在讲解具体代码前，我又要卖个关子了。
+我们先回到之前的`messageReceived`方法：
 
-关于Zero-Copy-Capable，我觉得理解为什么需要"Zero-Copy-Capable Rich Byte Buffer"，比理解它是怎么实现的，可能要更重要一点。我们先回到之前的`messageReceived`方法：
-
+```java
     public void messageReceived(
             ChannelHandlerContext ctx, MessageEvent e) {
         // Send back the received message to the remote peer.
         transferredBytes.addAndGet(((ChannelBuffer) e.getMessage()).readableBytes());
         e.getChannel().write(e.getMessage());
     }
+```
     
 这里`MessageEvent.getMessage()`默认的返回值是一个`ChannelBuffer`。我们知道，业务中需要的"Message"，其实是一条应用层级别的完整消息，而一般的buffer工作在传输层，与"Message"是不能对应上的。那么这个ChannelBuffer是什么呢？
 
-来一个官方User Guide里的图，我想更能说明这个问题：
+来一个官方给的图，我想这个答案就很明显了：
 
 ![virtual buffer in Netty][3]
 
-这里看到，TCP层HTTP报文被分成了两个ChannelBuffer，这两个Buffer对我们上层的逻辑(HTTP处理)是没有意义的。但是两个ChannelBuffer被组合起来，就成为了一个有意义的HTTP报文，这个报文对应一个ChannelBuffer，这才是能称之为"Message"的东西。这里用到了一个词"Virtual Buffer"，也就是所谓的"Zero-Copy-Capable Rich Byte Buffer"了。
+这里可以看到，TCP层HTTP报文被分成了两个ChannelBuffer，这两个Buffer对我们上层的逻辑(HTTP处理)是没有意义的。但是两个ChannelBuffer被组合起来，就成为了一个有意义的HTTP报文，这个报文对应的ChannelBuffer，才是能称之为"Message"的东西。这里用到了一个词"Virtual Buffer"，也就是所谓的"Zero-Copy-Capable Byte Buffer"了。顿时觉得豁然开朗了有没有！
 
-所以，**如果说NIO的Buffer和Netty的ChannelBuffer最大的区别的话，就是前者仅仅是网络传输上的Buffer，而后者是传输Buffer和抽象后的逻辑Buffer的结合。**延伸开来说，NIO仅仅是一个网络传输框架，而Netty是一个网络应用框架，包括网络以及应用的分层结构。
+我这里总结一下，**如果说NIO的Buffer和Netty的ChannelBuffer最大的区别的话，就是前者仅仅是传输上的Buffer，而后者其实是传输Buffer和抽象后的逻辑Buffer的结合。**延伸开来说，NIO仅仅是一个网络传输框架，而Netty是一个网络应用框架，包括网络以及应用的分层结构。
 
-当然，在Netty里，默认使用`ChannelBuffer`表示"Message"，不失为一个比较实用的方法，但是`MessageEvent.getMessage()`是可以存放一个POJO的，这样子抽象程度又高了一些，这个我们在以后讲到`ChannelPipeline`的时候会说明。
+当然，在Netty里，默认使用`ChannelBuffer`表示"Message"，不失为一个比较实用的方法，但是`MessageEvent.getMessage()`是可以存放一个POJO的，这样子抽象程度又高了一些，这个我们在以后讲到`ChannelPipeline`的时候会说到。
 
 ## How：Netty中的ChannelBuffer及实现
 
-好了，最后我们来看一下具体的实现，满足一下程序员的求知欲吧。Netty 3.7的buffer实现还是比较简单的，没有太多费脑细胞的地方。
+好了，终于来到了代码实现部分。之所以啰嗦了这么多，因为我觉得，关于"Zero-Copy-Capable Rich Byte Buffer"，理解为什么需要它，比理解它是怎么实现的，可能要更重要一点。
 
-ChannelBuffers是所有ChannelBuffer实现类的入口，它提供了很多静态的工具方法来创建不同的Buffer，靠“顺藤摸瓜”式读代码方式，大致能把各种ChannelBuffer的实现类摸个遍。
+关于实现方面，Netty 3.7的buffer相关内容还是比较简单的，也没有太多费脑细胞的地方。
+
+我想可能很多朋友跟我一样，喜欢"顺藤摸瓜"式读代码--找到一个入口，然后顺着查看它的调用，直到理解清楚。很幸运，`ChannelBuffers`(注意有s!)就是这样一根"藤"，它是所有ChannelBuffer实现类的入口，它提供了很多静态的工具方法来创建不同的Buffer，靠“顺藤摸瓜”式读代码方式，大致能把各种ChannelBuffer的实现类摸个遍。先列一下ChannelBuffer相关类图。
 
 ![channel buffer in Netty][1]
 
+此外还有`WrappedChannelBuffer`系列也是继承自`AbstractChannelBuffer`，图放到了后面。
 
 ### ChannelBuffer中的readerIndex和writerIndex
 
@@ -80,7 +102,7 @@ ChannelBuffers是所有ChannelBuffer实现类的入口，它提供了很多静�
 
 我倒是觉得这样的方式非常自然，比单指针与flip()要更加好理解一些。AbstactChannelBuffer还有两个相应的mark指针`markedReaderIndex`和`markedWriterIndex`，跟NIO的原理是一样的，这里不再赘述了。
 
-### 字节序Endianness
+### 字节序Endianness与BigEndianHeapChannelBuffer/LittleEndianHeapChannelBuffer
 
 在创建Buffer时，我们注意到了这样一个方法：`public static ChannelBuffer buffer(ByteOrder endianness, int capacity);`，其中`ByteOrder`是什么意思呢？
 
@@ -145,22 +167,14 @@ DynamicChannelBuffer是一个很方便的Buffer，之所以叫Dynamic是因为�
 
 查找componentId的算法再次不作介绍了，大家自己实现起来也不会太难。值得一提的是，基于ChannelBuffer连续读写的特性，使用了顺序查找(而不是二分查找)，并且用`lastAccessedComponentId`来进行缓存。
 
+### ByteBufferBackedChannelBuffer
+
+前面说ChannelBuffer是自己的实现的，其实只说对了一半。`ByteBufferBackedChannelBuffer`就是封装了NIO ByteBuffer的类，用于实现堆外内存的Buffer(使用NIO的`DirectByteBuffer`)。当然，其实它也可以放其他的ByteBuffer的实现类。
+
 ### WrappedChannelBuffer
 
 ![virtual buffer in Netty][2]
 
-
-writerIndex
-
-readerIndex
-
-HeapBuffer
-
-DirectBuffer
-
-trivial
-
-CompositeChannelBuffer gathering
 
 4.0之后ChannelBuffer改名ByteBuf，成了单独项目，为了性能优化，加入了BufferPool之类的机制，已经变得比较复杂了，但是本质倒没怎么变。性能优化是个很复杂的事情，研究源码时，建议先避开这些东西，除非你对算法情有独钟。举个例子，Netty4.0里为了优化，将Map换成了Java 8里6000行的[ConcurrentHashMapV8](https://github.com/netty/netty/blob/master/common/src/main/java/io/netty/util/internal/chmv8/ConcurrentHashMapV8.java)，你们感受一下…
 
@@ -171,4 +185,6 @@ CompositeChannelBuffer gathering
 
 参考资料：
 
+* [http://zh.wikipedia.org/zh-cn/TCP/IP%E5%8D%8F%E8%AE%AE](http://zh.wikipedia.org/zh-cn/TCP/IP%E5%8D%8F%E8%AE%AE)
+* Data_buffer [http://en.wikipedia.org/wiki/Data_buffer](http://en.wikipedia.org/wiki/Data_buffer)
 * Endianness [http://en.wikipedia.org/wiki/Endianness](http://en.wikipedia.org/wiki/Endianness)
