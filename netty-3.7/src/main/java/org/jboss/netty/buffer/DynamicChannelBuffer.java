@@ -64,23 +64,10 @@ public class DynamicChannelBuffer extends AbstractChannelBuffer {
             return;
         }
 
-        int newCapacity;
-        if (capacity() == 0) {
-            newCapacity = 1;
-        } else {
-            newCapacity = capacity();
-        }
+        int newCapacity = capacity();
         int minNewCapacity = writerIndex() + minWritableBytes;
         while (newCapacity < minNewCapacity) {
             newCapacity <<= 1;
-
-            // Check if we exceeded the maximum size of 2gb if this is the case then
-            // newCapacity == 0
-            //
-            // https://github.com/netty/netty/issues/258
-            if (newCapacity == 0) {
-                throw new IllegalStateException("Maximum size of 2gb exceeded");
-            }
         }
 
         ChannelBuffer newBuffer = factory().getBuffer(order(), newCapacity);

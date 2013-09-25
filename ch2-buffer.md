@@ -23,7 +23,7 @@ ChannelBuffers是所有ChannelBuffer实现类的入口，它提供了很多静�
 
 开始以为Netty的ChannelBuffer是对NIO ByteBuffer的一个封装，其实不是的，**它是把ByteBuffer重新实现了一遍**。
 
-Netty的底层也是一个byte[]，与ByteBuffer不同的是，它是可以同时进行读和写的，而不需要使用flip()进行读写切换。ChannelBuffer读写的核心代码在`AbstactChannelBuffer`里，这里通过readerIndex和writerIndex两个整数，分别指向当前读的位置和当前写的位置，并且，总是等于writerIndex - readerIndex。贴两段代码，大家应该能看的更明白一点：
+以最常用的`HeapChannelBuffer`为例，其底层也是一个byte[]，与ByteBuffer不同的是，它是可以同时进行读和写的，而不需要使用flip()进行读写切换。ChannelBuffer读写的核心代码在`AbstactChannelBuffer`里，这里通过readerIndex和writerIndex两个整数，分别指向当前读的位置和当前写的位置，并且，总是等于writerIndex - readerIndex。贴两段代码，大家应该能看的更明白一点：
 
 ```java
     public void writeByte(int value) {
@@ -38,24 +38,46 @@ Netty的底层也是一个byte[]，与ByteBuffer不同的是，它是可以同�
         return getByte(readerIndex ++);
     }
 
+    public int writableBytes() {
+        return capacity() - writerIndex;
+    }
+    
     public int readableBytes() {
         return writerIndex - readerIndex;
     }
 ```
 
-我倒是觉得这样的方式非常自然，比flip()要更加好理解一些。
+我倒是觉得这样的方式非常自然，比flip()要更加好理解一些。AbstactChannelBuffer还有两个相应的mark指针`markedReaderIndex`和`markedWriterIndex`，跟NIO的原理是一样的，这里不再赘述了。
 
 ### 字节序Endianness
 
 在创建Buffer时，我们注意到了这样一个方法：`public static ChannelBuffer buffer(ByteOrder endianness, int capacity);`，其中`ByteOrder`是什么意思呢？
 
-这里有个很基础的概念：Endianness或者ByteOrder(字节序)。它规定了多余一个字节的数字(int啊long什么的)，如何在内存中表示。BIG_ENDIAN(大端序)表示高位在前，整型数`12`会被存储为`0 0 0 12`四字节，而LITTLE_ENDIAN则正好相反。可能搞C/C++的程序员对这个会比较熟悉，而Javaer则比较陌生一点，因为Java已经把内存给管理好了。但是在网络编程方面，根据协议的不同，不同的字节序也可能会被用到。主流还是大端序，参考[RFC1700](http://tools.ietf.org/html/rfc1700)。
+这里有个很基础的概念：Endianness或者ByteOrder(字节序)。它规定了多余一个字节的数字(int啊long什么的)，如何在内存中表示。BIG_ENDIAN(大端序)表示高位在前，整型数`12`会被存储为`0 0 0 12`四字节，而LITTLE_ENDIAN则正好相反。可能搞C/C++的程序员对这个会比较熟悉，而Javaer则比较陌生一点，因为Java已经把内存给管理好了。但是在网络编程方面，根据协议的不同，不同的字节序也可能会被用到。目前大部分协议还是采用大端序，可参考[RFC1700](http://tools.ietf.org/html/rfc1700)。
 
 了解了这些知识，我们也很容易就知道为什么会有`BigEndianHeapChannelBuffer`和`LittleEndianHeapChannelBuffer`了！
 
 ### DynamicChannelBuffer
 
-DynamicChannelBuffer是一个很方便的Buffer，之所以叫Dynamic是因为它的长度会根据内容的长度来扩充，你可以像使用ArrayList一样，无须关心其容量。实现自动扩容的核心在于`ensureWritableBytes`方法，算法很简单：容量不够时，新建一个容量x2的buffer，跟ArrayList的扩容是相同的。
+DynamicChannelBuffer是一个很方便的Buffer，之所以叫Dynamic是因为它的长度会根据内容的长度来扩充，你可以像使用ArrayList一样，无须关心其容量。实现自动扩容的核心在于`ensureWritableBytes`方法，算法很简单：容量不够时，新建一个容量x2的buffer，跟ArrayList的扩容是相同的。贴一段代码吧(为了代码易懂，这里我删掉了一些边界检查，只保留主逻辑)：
+
+```java
+    public void ensureWritableBytes(int minWritableBytes) {
+        if (minWritableBytes <= writableBytes()) {
+            return;
+        }
+
+        int newCapacity = capacity();
+        int minNewCapacity = writerIndex() + minWritableBytes;
+        while (newCapacity < minNewCapacity) {
+            newCapacity <<= 1;
+        }
+
+        ChannelBuffer newBuffer = factory().getBuffer(order(), newCapacity);
+        newBuffer.writeBytes(buffer, 0, writerIndex());
+        buffer = newBuffer;
+    }
+```
 
 ### CompositeChannelBuffer
 
