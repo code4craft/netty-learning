@@ -15,7 +15,12 @@
  */
 package org.jboss.netty.channel.socket.oio;
 
-import static org.jboss.netty.channel.Channels.*;
+import org.jboss.netty.channel.*;
+import org.jboss.netty.channel.socket.DefaultServerSocketChannelConfig;
+import org.jboss.netty.channel.socket.ServerSocketChannel;
+import org.jboss.netty.channel.socket.ServerSocketChannelConfig;
+import org.jboss.netty.logging.InternalLogger;
+import org.jboss.netty.logging.InternalLoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -23,16 +28,7 @@ import java.net.ServerSocket;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.jboss.netty.channel.AbstractServerChannel;
-import org.jboss.netty.channel.ChannelException;
-import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelSink;
-import org.jboss.netty.channel.socket.DefaultServerSocketChannelConfig;
-import org.jboss.netty.channel.socket.ServerSocketChannel;
-import org.jboss.netty.channel.socket.ServerSocketChannelConfig;
-import org.jboss.netty.logging.InternalLogger;
-import org.jboss.netty.logging.InternalLoggerFactory;
+import static org.jboss.netty.channel.Channels.fireChannelOpen;
 
 class OioServerSocketChannel extends AbstractServerChannel
                              implements ServerSocketChannel {
@@ -52,6 +48,7 @@ class OioServerSocketChannel extends AbstractServerChannel
         super(factory, pipeline, sink);
 
         try {
+            //BIND
             socket = new ServerSocket();
         } catch (IOException e) {
             throw new ChannelException(
