@@ -15,11 +15,11 @@
  */
 package org.jboss.netty.example.proxy;
 
-import static org.jboss.netty.channel.Channels.*;
-
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.socket.ClientSocketChannelFactory;
+
+import static org.jboss.netty.channel.Channels.pipeline;
 
 public class HexDumpProxyPipelineFactory implements ChannelPipelineFactory {
 
@@ -39,4 +39,6 @@ public class HexDumpProxyPipelineFactory implements ChannelPipelineFactory {
         p.addLast("handler", new HexDumpProxyInboundHandler(cf, remoteHost, remotePort));
         return p;
     }
+
+
 }
