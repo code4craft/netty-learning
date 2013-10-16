@@ -15,16 +15,16 @@
  */
 package org.jboss.netty.channel;
 
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.handler.execution.ExecutionHandler;
+import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
+import org.jboss.netty.handler.ssl.SslHandler;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.handler.execution.ExecutionHandler;
-import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
-import org.jboss.netty.handler.ssl.SslHandler;
 
 
 /**
@@ -61,46 +61,46 @@ import org.jboss.netty.handler.ssl.SslHandler;
  * of the event is interpreted somewhat differently depending on whether it is
  * going upstream or going downstream. Please refer to {@link ChannelEvent} for
  * more information.
- * <pre>
- *                                       I/O Request
- *                                     via {@link Channel} or
- *                                 {@link ChannelHandlerContext}
- *                                           |
- *  +----------------------------------------+---------------+
- *  |                  ChannelPipeline       |               |
- *  |                                       \|/              |
- *  |  +----------------------+  +-----------+------------+  |
- *  |  | Upstream Handler  N  |  | Downstream Handler  1  |  |
- *  |  +----------+-----------+  +-----------+------------+  |
- *  |            /|\                         |               |
- *  |             |                         \|/              |
- *  |  +----------+-----------+  +-----------+------------+  |
- *  |  | Upstream Handler N-1 |  | Downstream Handler  2  |  |
- *  |  +----------+-----------+  +-----------+------------+  |
- *  |            /|\                         .               |
- *  |             .                          .               |
- *  |     [ sendUpstream() ]        [ sendDownstream() ]     |
- *  |     [ + INBOUND data ]        [ + OUTBOUND data  ]     |
- *  |             .                          .               |
- *  |             .                         \|/              |
- *  |  +----------+-----------+  +-----------+------------+  |
- *  |  | Upstream Handler  2  |  | Downstream Handler M-1 |  |
- *  |  +----------+-----------+  +-----------+------------+  |
- *  |            /|\                         |               |
- *  |             |                         \|/              |
- *  |  +----------+-----------+  +-----------+------------+  |
- *  |  | Upstream Handler  1  |  | Downstream Handler  M  |  |
- *  |  +----------+-----------+  +-----------+------------+  |
- *  |            /|\                         |               |
- *  +-------------+--------------------------+---------------+
- *                |                         \|/
- *  +-------------+--------------------------+---------------+
- *  |             |                          |               |
- *  |     [ Socket.read() ]          [ Socket.write() ]      |
- *  |                                                        |
- *  |  Netty Internal I/O Threads (Transport Implementation) |
- *  +--------------------------------------------------------+
- * </pre>
+* <pre>
+*                                       I/O Request
+*                                     via {@link Channel} or
+*                                 {@link ChannelHandlerContext}
+*                                           |
+*  +----------------------------------------+---------------+
+*  |                  ChannelPipeline       |               |
+*  |                                       \|/              |
+*  |  +----------------------+  +-----------+------------+  |
+*  |  | Upstream Handler  N  |  | Downstream Handler  1  |  |
+*  |  +----------+-----------+  +-----------+------------+  |
+*  |            /|\                         |               |
+*  |             |                         \|/              |
+*  |  +----------+-----------+  +-----------+------------+  |
+*  |  | Upstream Handler N-1 |  | Downstream Handler  2  |  |
+*  |  +----------+-----------+  +-----------+------------+  |
+*  |            /|\                         .               |
+*  |             .                          .               |
+*  |     [ sendUpstream() ]        [ sendDownstream() ]     |
+*  |     [ + INBOUND data ]        [ + OUTBOUND data  ]     |
+*  |             .                          .               |
+*  |             .                         \|/              |
+*  |  +----------+-----------+  +-----------+------------+  |
+*  |  | Upstream Handler  2  |  | Downstream Handler M-1 |  |
+*  |  +----------+-----------+  +-----------+------------+  |
+*  |            /|\                         |               |
+*  |             |                         \|/              |
+*  |  +----------+-----------+  +-----------+------------+  |
+*  |  | Upstream Handler  1  |  | Downstream Handler  M  |  |
+*  |  +----------+-----------+  +-----------+------------+  |
+*  |            /|\                         |               |
+*  +-------------+--------------------------+---------------+
+*                |                         \|/
+*  +-------------+--------------------------+---------------+
+*  |             |                          |               |
+*  |     [ Socket.read() ]          [ Socket.write() ]      |
+*  |                                                        |
+*  |  Netty Internal I/O Threads (Transport Implementation) |
+*  +--------------------------------------------------------+
+* </pre>
  * An upstream event is handled by the upstream handlers in the bottom-up
  * direction as shown on the left side of the diagram.  An upstream handler
  * usually handles the inbound data generated by the I/O thread on the bottom
