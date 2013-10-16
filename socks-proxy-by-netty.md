@@ -257,7 +257,7 @@ public class SocksProxyPipelineFactory implements ChannelPipelineFactory {
 	}
 ```
 
-至此，一个代理完成！
+至此，一个代理完成！点这里查看代码：[https://github.com/code4craft/netty-learning/tree/master/learning-src/socksproxy](https://github.com/code4craft/netty-learning/tree/master/learning-src/socksproxy)
 
   [1]: http://static.oschina.net/uploads/space/2013/1016/174446_CK7D_190591.png
   
