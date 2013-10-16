@@ -12,3 +12,7 @@ Netty目前有两个分支：4.x和3.x。4.0分支重写了很多东西，并对
 ### 3.Channel
 ### 4.ChannelHandler及Pipeline
 ### 5.协议支持
+
+## Netty实战
+
+### [1.构建一个socks proxy](https://github.com/code4craft/netty-learning/blob/master/socks-proxy-by-netty.md)
