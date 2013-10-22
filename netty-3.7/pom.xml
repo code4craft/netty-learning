@@ -207,6 +207,16 @@
       <version>1.6.4</version>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>com.dianping</groupId>
+          <artifactId>mocksocks-client</artifactId>
+          <version>0.0.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+          <groupId>org.javassist</groupId>
+          <artifactId>javassist</artifactId>
+          <version>3.18.1-GA</version>
+      </dependency>
     <!-- Test dependencies for jboss marshalling encoder/decoder -->
     <dependency>
       <groupId>org.jboss.marshalling</groupId>

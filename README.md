@@ -9,9 +9,9 @@ Netty目前有两个分支：4.x和3.x。4.0分支重写了很多东西，并对
 
 ### [1.概述](https://github.com/code4craft/netty-learning/blob/master/ch1-overview.md)
 ### [2.Buffer](https://github.com/code4craft/netty-learning/blob/master/ch2-buffer.md)
-### 3.Channel
-### 4.ChannelHandler及Pipeline
-### 5.协议支持
+### [3.Channel](https://github.com/code4craft/netty-learning/blob/master/ch3-channel.md) *未完成*
+### [4.ChannelHandler及Pipeline](https://github.com/code4craft/netty-learning/blob/master/ch4-pipeline.md) *未完成*
+### [5.协议支持](https://github.com/code4craft/netty-learning/blob/master/ch5-codec.md) *未完成*
 
 ## Netty实战
 
