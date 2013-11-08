@@ -46,7 +46,7 @@
 	<key>Creator</key>
 	<string>黄 亿华</string>
 	<key>DisplayScale</key>
-	<string>1 0/72 in = 1 0/72 in</string>
+	<string>1 0/72 in = 1.0000 in</string>
 	<key>GraphDocumentVersion</key>
 	<integer>8</integer>
 	<key>GraphicsList</key>
@@ -89,7 +89,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -136,7 +136,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -211,7 +211,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -252,7 +252,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -310,7 +310,7 @@ Event}</string>
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -479,7 +479,7 @@ Event}</string>
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -528,13 +528,13 @@ Event}</string>
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
 
 \f0\fs32 \cf0 Channel\
-Handler}</string>
+Sink}</string>
 			</dict>
 		</dict>
 		<dict>
@@ -560,7 +560,7 @@ Handler}</string>
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -592,7 +592,7 @@ Handler}</string>
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -624,7 +624,7 @@ Handler}</string>
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -656,7 +656,7 @@ Handler}</string>
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf400
 \cocoascreenfonts1{\fonttbl\f0\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -713,7 +713,7 @@ Pipeline}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-10-22 03:53:47 +0000</string>
+	<string>2013-11-08 15:47:49 +0000</string>
 	<key>Modifier</key>
 	<string>黄 亿华</string>
 	<key>NotesVisible</key>
@@ -789,7 +789,7 @@ Pipeline}</string>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>Frame</key>
-		<string>{{373, 83}, {693, 795}}</string>
+		<string>{{373, 88}, {693, 790}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
@@ -803,7 +803,7 @@ Pipeline}</string>
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{0, 0}, {558, 656}}</string>
+		<string>{{0, 0}, {558, 651}}</string>
 		<key>Zoom</key>
 		<real>1</real>
 		<key>ZoomValues</key>
