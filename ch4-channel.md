@@ -56,6 +56,9 @@ Netty channel部分比较复杂，一时可能难以入手。我们先结合一�
 
 [http://www.coderli.com/category/open-source/distributed/netty](http://www.coderli.com/category/open-source/distributed/netty)
 
+twitter关于3.0与4.0中Channel Event的说明：
+[https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead](https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead)
+
   [1]: http://static.oschina.net/uploads/space/2013/0929/174705_47Rr_190591.png
   
 Channels部分事件流转静态方法
