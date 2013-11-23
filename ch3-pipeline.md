@@ -18,15 +18,19 @@ Channel是理解和使用Netty的核心。之前在概述中粗略讲到了事�
 
 ## 二层梦境：ChannelPipeline的主流程
 
-Netty的ChannelPipeline包含两条线路：Upstream和Downstream。Upstream对应上行，接收到的消息、被动的状态改变，都属于Upstream。Downstream则对应下行，发送的消息、主动的状态改变，都属于Downstream。
+Netty的ChannelPipeline包含两条线路：Upstream和Downstream。Upstream对应上行，接收到的消息、被动的状态改变，都属于Upstream。Downstream则对应下行，发送的消息、主动的状态改变，都属于Downstream。`ChannelPipeline`接口包含了两个重要的方法:`sendUpstream(ChannelEvent e)`和`sendDownstream(ChannelEvent e)`，就分别对应了Upstream和Downstream。
 
-对应的，ChannelPipeline里包含的ChannelHandler也包含两类：`ChannelUpstreamHandler`和`ChannelDownstreamHandler`。每条线路的Handler是互相独立的。
+对应的，ChannelPipeline里包含的ChannelHandler也包含两类：`ChannelUpstreamHandler`和`ChannelDownstreamHandler`。每条线路的Handler是互相独立的。它们都很简单的只包含一个方法：`ChannelUpstreamHandler.handleUpstream`和`ChannelDownstreamHandler.handleDownstream`。
 
 Netty官方的javadoc里有一张图(`ChannelPipeline`接口里)，非常形象的说明了这个机制(我对原图进行了一点修改，加上了`ChannelSink`，因为我觉得这部分对理解代码流程会有些帮助)：
 
 ![channel pipeline][2]
 
 什么叫`ChannelSink`呢？ChannelSink包含一个重要方法`ChannelSink.eventSunk`，可以接受任意ChannelEvent。"sink"的意思是"下沉"，那么"ChannelSink"好像可以理解为"Channel下沉的地方"？实际上，它的作用确实是这样，也可以换个说法："处于末尾的万能Handler"。最初读到这里，也有些困惑，这么理解之后，就感觉简单许多。**只有Downstream包含`ChannelSink`**，这里会做一些建立连接、绑定端口等重要操作。为什么UploadStream没有ChannelSink呢？我只能认为，一方面，不符合"sink"的意义，另一方面，也没有什么处理好做的吧！
+
+这里有个值得注意的地方：在一条“流”里，一个`ChannelEvent`并不会主动的"流"经所有的Handler，而是由**上一个Handler显式的调用`ChannelPipeline.sendUp(Down)stream`产生，并交给下一个Handler处理**。也就是说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用`sendUp(Down)stream`新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。
+
+顺便说一句，在Netty 3.x里，这个机制会导致大量的ChannelEvent对象创建，因此Netty 4.x版本对此进行了改进。twitter的[finagle](https://github.com/twitter/finagle)框架实践中，就提到从Netty 3.x升级到Netty 4.x，可以大大降低GC开销。有兴趣的可以看看这篇文章：[https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead](https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead)
 
 下面我们从代码层面来对这里面发生的事情进行深入分析，这部分涉及到一些细节，需要打开项目源码，对照来看，会比较有收获。
 
@@ -54,9 +58,9 @@ Netty官方的javadoc里有一张图(`ChannelPipeline`接口里)，非常形象�
 
 ### sendUpstream和sendDownstream
 
-`ChannelPipeline`接口包含了两个重要的方法：`sendUpstream(ChannelEvent e)`和`sendDownstream(ChannelEvent e)`，对应Upstream和Downstream。**所有事件**的发起都是基于这两个方法进行的。`Channels`类有一系列`fireChannelBound`之类的`fireXXXX`方法，其实都是对这两个方法的facade包装。
+前面提到了，`ChannelPipeline`接口的两个重要的方法：`sendUpstream(ChannelEvent e)`和`sendDownstream(ChannelEvent e)`。**所有事件**的发起都是基于这两个方法进行的。`Channels`类有一系列`fireChannelBound`之类的`fireXXXX`方法，其实都是对这两个方法的facade包装。
 
-简单贴一下这两个方法的实现，来帮助理解(对代码做了一些简化，保留主逻辑)：
+下面来看一下这两个方法的实现(对代码做了一些简化，保留主逻辑)：
 
 ```java
     public void sendUpstream(ChannelEvent e) {
@@ -64,10 +68,10 @@ Netty官方的javadoc里有一张图(`ChannelPipeline`接口里)，非常形象�
         head.getHandler().handleUpstream(head, e);
     }
     
-    private DefaultChannelHandlerContext getActualDownstreamContext(DefaultChannelHandlerContext ctx) {
+    private DefaultChannelHandlerContext getActualUpstreamContext(DefaultChannelHandlerContext ctx) {
         DefaultChannelHandlerContext realCtx = ctx;
-        while (!realCtx.canHandleDownstream()) {
-            realCtx = realCtx.prev;
+        while (!realCtx.canHandleUpstream()) {
+            realCtx = realCtx.next;
             if (realCtx == null) {
                 return null;
             }
@@ -76,23 +80,56 @@ Netty官方的javadoc里有一张图(`ChannelPipeline`接口里)，非常形象�
     }
 ```
 
-例如这里用到的`ChannelHandlerContext.getHandler()`，就会获取当前应该使用哪个handler来进行处理。
+这里最终调用了`ChannelUpstreamHandler.handleUpstream`来处理这个ChannelEvent。有意思的是，这里我们看不到任何"将Handler向后移一位"的操作，但是我们总不能每次都用同一个Handler来进行处理啊？实际上，我们更为常用的是`ChannelHandlerContext.handleUpstream`方法(实现是`DefaultChannelHandlerContext.sendUpstream`方法)：
 
-这里的Pipeline机制是这样的：
+```java
+	public void sendUpstream(ChannelEvent e) {
+		DefaultChannelHandlerContext next = getActualUpstreamContext(this.next);
+		DefaultChannelPipeline.this.sendUpstream(next, e);
+	}
+```
 
-首先handler分为Upstream和Downstream两类。然后每个handler会接收到一个事件，如果需要继续处理，那么**它会发起一个事件**，这个事件只有它之后的handler会接收到。**如果它不再发起事件，那么处理就到此结束。**
+可以看到，这里最终仍然调用了`ChannelPipeline.sendUpstream`方法，但是**它会将Handler指针后移**。
+
+我们接下来看看`DefaultChannelHandlerContext.sendDownstream`:
+
+```java
+	public void sendDownstream(ChannelEvent e) {
+		DefaultChannelHandlerContext prev = getActualDownstreamContext(this.prev);
+		if (prev == null) {
+			try {
+				getSink().eventSunk(DefaultChannelPipeline.this, e);
+			} catch (Throwable t) {
+				notifyHandlerException(e, t);
+			}
+		} else {
+			DefaultChannelPipeline.this.sendDownstream(prev, e);
+		}
+	}
+```
+
+与sendUpstream好像不大相同哦？这里有两点：一是到达末尾时，就如梦境二所说，会调用ChannelSink进行处理；二是这里指针是**往前移**的，所以我们知道了：
+
+**UpstreamHandler是从前往后执行的，DownstreamHandler是从后往前执行的。**在ChannelPipeline里添加时需要注意顺序了！
+
+DefaultChannelPipeline里还有些机制，像添加/删除/替换Handler，以及`ChannelPipelineFactory`等，比较好理解，就不细说了。
 
 ## 回到现实：Pipeline解决的问题
 
-理清了ChannelPipeline的主流程，我们对Channel部分的大致结构算是弄清楚了。可是到了这里，我们依然对一个连接具体怎么处理没有什么概念，下面我们从ChannelEvent开始来分析一下，具体Netty在连接的建立、数据的传输过程中，究竟做了什么事情。
+好了，深入分析完代码，有点头晕了，我们回到最开始的地方，来想一想，Netty的Pipeline机制解决了什么问题？
+
+我认为至少有两点：
+
+一是提供了ChannelHandler的编程模型，基于ChannelHandler开发业务逻辑，基本不需要关心网络通讯方面的事情，专注于编码/解码/逻辑处理就可以了。Handler也是比较方便的开发模式，在很多框架中都有用到。
+
+二是实现了所谓的"Universal Asynchronous API"。这也是Netty官方标榜的一个功能。用过OIO和NIO的都知道，这两套API风格相差极大，要从一个迁移到另一个成本是很大的。即使是NIO，异步和同步编程差距也很大。而Netty屏蔽了OIO和NIO的API差异，通过Channel提供对外接口，并通过ChannelPipeline将其连接起来，因此替换起来非常简单。
 
 ![universal API][3]
 
-Pipeline这部分拖了两个月，终于写完了。中间写的实在缓慢，但是仍不忍心这部分就此烂尾。中间参考了一些优秀的文章，还自己使用netty开发了一些应用。以后这类文章，还是要集中时间来写完好了。
+理清了ChannelPipeline的主流程，我们对Channel部分的大致结构算是弄清楚了。可是到了这里，我们依然对一个连接具体怎么处理没有什么概念，下篇文章，我们会分析一下，Netty在连接的建立、数据的传输过程中，具体做了什么事情。
 
-下一篇文章会详细分析一下Netty中已有的handler。
+PS: Pipeline这部分拖了两个月，终于写完了。中间写的实在缓慢，写个高质量(至少是自认为吧！)的文章不容易，但是仍不忍心这部分就此烂尾。中间参考了一些优秀的文章，还自己使用netty开发了一些应用。以后这类文章，还是要集中时间来写完好了。
 
   [1]: http://static.oschina.net/uploads/space/2013/0921/174032_18rb_190591.png
   [2]: http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png
-  [3]: http://static.oschina.net/uploads/space/2013/1108/234357_DeN0_190591.png
-  [4]: http://static.oschina.net/uploads/space/2013/1108/234411_gvSE_190591.png
+  [3]: http://static.oschina.net/uploads/space/2013/1124/001528_TBb5_190591.jpg
