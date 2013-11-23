@@ -64,7 +64,7 @@ Netty官方的javadoc里有一张图(`ChannelPipeline`接口里)，非常形象�
         head.getHandler().handleUpstream(head, e);
     }
     
-    private DefaultChannelHandlerContext     getActualDownstreamContext(DefaultChannelHandlerContext ctx) {
+    private DefaultChannelHandlerContext getActualDownstreamContext(DefaultChannelHandlerContext ctx) {
         DefaultChannelHandlerContext realCtx = ctx;
         while (!realCtx.canHandleDownstream()) {
             realCtx = realCtx.prev;
