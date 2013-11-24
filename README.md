@@ -34,6 +34,36 @@ Netty是Java世界知名的网络应用框架。本系列文章是Netty的源码
 
 ### [1.构建一个socks proxy](https://github.com/code4craft/netty-learning/blob/master/socks-proxy-by-netty.md)
 
+=========
+
+## 其他学习资料：
+
+《Netty代码分析》 by 阿里中间件团队博客:
+[http://jm-blog.aliapp.com/?p=423](http://jm-blog.aliapp.com/?p=423)
+
+《netty从入门到精通》:
+[http://cqupt123.iteye.com/blog/1682657](http://cqupt123.iteye.com/blog/1682657)
+
+[@OneCoder](http://weibo.com/kubicoder)的《Java NIO框架Netty教程》:
+[http://www.coderli.com/category/open-source/distributed/netty](http://www.coderli.com/category/open-source/distributed/netty)
+
+twitter关于3.0与4.0中Channel Event的说明：
+[https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead](https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead)
+
+## 使用Netty的开源项目：
+
+* ### [dubbo](https://github.com/alibaba/dubbo)
+
+	阿里巴巴的RPC中间件。支持Netty和Mina。
+
+* ### [finagle](https://github.com/twitter/finagle)
+
+	Twitter的RPC中间件。使用Scala编写。
+
+* ### [Moco](https://github.com/dreamhead/moco)
+
+	基于Netty的HTTP MOCK服务器。
+
 ## 协议：
 
 相关代码遵循Apache V2协议。
