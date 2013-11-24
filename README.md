@@ -18,7 +18,9 @@ Netty是Java世界知名的网络应用框架。本系列文章是Netty的源码
 
 ==========
 
-## Netty的架构
+## 文章索引
+
+## 一、Netty的架构
 
 ### [1.概述](https://github.com/code4craft/netty-learning/blob/master/ch1-overview.md)
 ### [2.Netty中的buffer](https://github.com/code4craft/netty-learning/blob/master/ch2-buffer.md)
@@ -26,11 +28,11 @@ Netty是Java世界知名的网络应用框架。本系列文章是Netty的源码
 ### [4.层层分析Netty中的Channel(下)](https://github.com/code4craft/netty-learning/blob/master/ch4-channel-nio.md) *未完成*
 ### [5.分门别类讲讲Handler](https://github.com/code4craft/netty-learning/blob/master/ch5-handler.md) *未完成*
 
-## Netty中的特性与细节
+## 二、Netty中的特性与细节
 
 ### [1.理解Netty中的异步](https://github.com/code4craft/netty-learning/blob/master/detail/ch1-async-in-netty.md) *未完成*
 
-## Netty实战
+## 三、Netty实战
 
 ### [1.构建一个socks proxy](https://github.com/code4craft/netty-learning/blob/master/socks-proxy-by-netty.md)
 
