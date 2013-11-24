@@ -61,6 +61,10 @@ twitter关于3.0与4.0中Channel Event的说明：
 * ### [finagle](https://github.com/twitter/finagle)
 
 	Twitter的RPC中间件。使用Scala编写。
+	
+* ### [Norbert](https://github.com/rhavyn/norbert)
+
+	LinkedIn的RPC中间件。使用Scala编写。
 
 * ### [Moco](https://github.com/dreamhead/moco)
 
