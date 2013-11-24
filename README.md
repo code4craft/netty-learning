@@ -74,4 +74,4 @@ twitter关于3.0与4.0中Channel Event的说明：
 
 ## 贡献：
 
-你可以fork分支，修改后并提交pull request。pull request接受后，我会将你提升为项目commiter。
+你可以fork分支，修改后并提交pull request。pull request接受后，我会将你提升为项目commiter，并加入到贡献者名单里。
