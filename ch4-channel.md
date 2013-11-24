@@ -1,10 +1,11 @@
-netty那点事(三) NioServerChannel
+层层分析Netty中的Channel(下)
 --------
-终于来到了最重要的Channel部分。这部分实在写得慢，一方面是这部分盘根错节，不太好理清头绪，另一方面是看到了几篇很优秀的文章，想要写得更好，确实要多费一番心思。
 
-这篇文章会从几个维度来解释netty的Channel机制。
+这篇文章会走进Netty处理的内部。这里只介绍NIO部分。
 
-## 一个连接的生命周期
+## 第一层：Channel的类型及创建
+
+我们在使用Netty时，总是需要指定一个`ChannelFactory`，这个就是
 
 Bind: `NioServerSocketChannel`
 
@@ -14,7 +15,11 @@ Read:`NioWorker.read`
 
 Write:`AbstractNioWorker`
 
-## netty与NIO
+## 第二层：Channel与底层IO的结合
+
+## 第三层：从NioServerSocketChannel看NIO与Reactor模式
+
+## 回到现实：几种与对应的实现
 
 ## NIO:
 
