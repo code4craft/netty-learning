@@ -25,8 +25,9 @@ Netty是Java世界知名的网络应用框架。本系列文章是Netty的源码
 ### [1.概述](https://github.com/code4craft/netty-learning/blob/master/ch1-overview.md)
 ### [2.Netty中的buffer](https://github.com/code4craft/netty-learning/blob/master/ch2-buffer.md)
 ### [3.层层分析Netty中的Channel(上)](https://github.com/code4craft/netty-learning/blob/master/ch3-pipeline.md)
-### [4.层层分析Netty中的Channel(下)](https://github.com/code4craft/netty-learning/blob/master/ch4-channel-nio.md) *未完成*
-### [5.分门别类讲讲Handler](https://github.com/code4craft/netty-learning/blob/master/ch5-handler.md) *未完成*
+### [4.层层分析Netty中的Channel(上)](https://github.com/code4craft/netty-learning/blob/master/ch4-pipeline.md)
+### [5.层层分析Netty中的Channel(下)](https://github.com/code4craft/netty-learning/blob/master/ch5-channel-nio.md) *未完成*
+### [6.分门别类讲讲Handler](https://github.com/code4craft/netty-learning/blob/master/ch6-handler.md) *未完成*
 
 ## 二、Netty中的特性与细节
 
@@ -54,11 +55,11 @@ twitter关于3.0与4.0中Channel Event的说明：
 
 ## 使用Netty的开源项目：
 
-* ### [dubbo](https://github.com/alibaba/dubbo)
+* ### [Dubbo](https://github.com/alibaba/dubbo)
 
 	阿里巴巴的RPC中间件。支持Netty和Mina。
 
-* ### [finagle](https://github.com/twitter/finagle)
+* ### [Finagle](https://github.com/twitter/finagle)
 
 	Twitter的RPC中间件。使用Scala编写。
 	

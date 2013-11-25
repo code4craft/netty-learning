@@ -133,3 +133,7 @@ PS: Pipeline这部分拖了两个月，终于写完了。中间写的实在缓�
   [1]: http://static.oschina.net/uploads/space/2013/0921/174032_18rb_190591.png
   [2]: http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png
   [3]: http://static.oschina.net/uploads/space/2013/1124/001528_TBb5_190591.jpg
+
+参考资料：
+
+* Sink [http://en.wikipedia.org/wiki/Sink_\(computing\)](http://en.wikipedia.org/wiki/Sink_\(computing\))
