@@ -26,7 +26,7 @@ Netty是Java世界知名的网络应用框架。本系列文章是Netty的源码
 ### [2.Netty中的buffer](https://github.com/code4craft/netty-learning/blob/master/ch2-buffer.md)
 ### [3.Channel与Pipeline](https://github.com/code4craft/netty-learning/blob/master/ch3-pipeline.md)
 ### [4.Channel的生命周期](https://github.com/code4craft/netty-learning/blob/master/ch4-channel-lifecycle.md)
-### [5.Netty与Reactor模式](https://github.com/code4craft/netty-learning/blob/master/ch5-channel-nio.md) *未完成*
+### [5.Channel与Reactor模式](https://github.com/code4craft/netty-learning/blob/master/ch5-channel-nio.md) *未完成*
 ### [6.分门别类讲讲Handler](https://github.com/code4craft/netty-learning/blob/master/ch6-handler.md) *未完成*
 
 ## 二、Netty中的特性与细节
