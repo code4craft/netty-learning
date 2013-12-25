@@ -1,6 +1,6 @@
 Channel与Pipeline
 --------
-Channel是理解和使用Netty的核心。Channel的涉及内容较多，这里我使用由浅入深的介绍方法。在这篇文章中，我们主要介绍Netty中Channel部分的实现机制。为了避免枯燥，借用一下《盗梦空间》的“梦境”概念，希望大家喜欢。
+Channel是理解和使用Netty的核心。Channel的涉及内容较多，这里我使用由浅入深的介绍方法。在这篇文章中，我们主要介绍Channel部分中Pipeline实现机制。为了避免枯燥，借用一下《盗梦空间》的“梦境”概念，希望大家喜欢。
 
 ## 一层梦境：Channel实现概览
 
@@ -60,7 +60,7 @@ Netty官方的javadoc里有一张图(`ChannelPipeline`接口里)，非常形象�
 
 前面提到了，`ChannelPipeline`接口的两个重要的方法：`sendUpstream(ChannelEvent e)`和`sendDownstream(ChannelEvent e)`。**所有事件**的发起都是基于这两个方法进行的。`Channels`类有一系列`fireChannelBound`之类的`fireXXXX`方法，其实都是对这两个方法的facade包装。
 
-下面来看一下这两个方法的实现(对代码做了一些简化，保留主逻辑)：
+下面来看一下这两个方法的实现。先看sendUpstream(对代码做了一些简化，保留主逻辑)：
 
 ```java
     public void sendUpstream(ChannelEvent e) {
@@ -126,7 +126,7 @@ DefaultChannelPipeline里还有些机制，像添加/删除/替换Handler，以�
 
 ![universal API][3]
 
-理清了ChannelPipeline的主流程，我们对Channel部分的大致结构算是弄清楚了。可是到了这里，我们依然对一个连接具体怎么处理没有什么概念，下篇文章，我们会分析一下，Netty中一个连接的生命周期，在连接的建立、数据的传输过程中，具体做了什么事情。
+理清了ChannelPipeline的主流程，我们对Channel部分的大致结构算是弄清楚了。可是到了这里，我们依然对一个连接具体怎么处理没有什么概念，下篇文章，我们会分析一下，在Netty中，捷径如何处理连接的建立、数据的传输这些事情。
 
 PS: Pipeline这部分拖了两个月，终于写完了。中间写的实在缓慢，写个高质量(至少是自认为吧！)的文章不容易，但是仍不忍心这部分就此烂尾。中间参考了一些优秀的文章，还自己使用netty开发了一些应用。以后这类文章，还是要集中时间来写完好了。
 

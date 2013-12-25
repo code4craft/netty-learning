@@ -5,19 +5,21 @@ Channel与NIO
 
 ## 一、Socket的生命周期
 
-在Java里，我们使用[Socket](http://en.wikipedia.org/wiki/Network_socket)编程方式处理网络IO。在OIO中有`ServerSocket`、`Socket`和`DatagramSocket`，前两个对应TCP连接，后一个对应UDP报文。在NIO中，我们改用了`ServerSocketChannel`、`SocketChannel`和`DatagramChannel`，并拥有了基于Selector的通知机制，但是Socket使用的方式可以说没有什么变化。
+在TCP/IP协议中，网络传输层分为TCP和UDP两种。UDP没有连接的概念，双方都是对等的，只存在send&receive，相对简单。对于TCP，乃至于所有有连接的传输层协议，都可以简单的概括为三个步骤：建立连接、传输、关闭连接。
 
-UDP没有连接的概念，双方都是对等的，只存在send&receive，相对简单。而对于TCP socket，则需要经过建立连接的过程。
+在Java里，无论是OIO还是NIO，都是使用[Socket](http://en.wikipedia.org/wiki/Network_socket)编程方式。在OIO中有`ServerSocket`、`Socket`和`DatagramSocket`，前两个对应TCP，后一个对应UDP。在NIO中，我们改用了`ServerSocketChannel`、`SocketChannel`和`DatagramChannel`，并拥有了基于Selector的通知机制，但是Socket使用的方式可以说没有什么变化。
 
-在建立连接之前，存在两个角色：Server和Client。
+而对于TCP socket，则需要经过建立连接的过程。
+
+在建立连接之前，存在两个角色：ServerSocketChannel和SocketChannel。
 
 Client端的流程是这样：
 
-Open=>Connect
+open()=>connect()
 
 Server端的流程是这样：
 
-Open=>Bind=>(Listen)=>Accept
+open()=>bind()=>(listen)=>accept()
 
 建立连接之后，C/S双方都会拿到一个对等的`SocketChannel`，通过它可以进行`read()`/`write()`等数据交互，并可以使用`close()`关闭连接。
 
