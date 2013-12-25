@@ -105,6 +105,7 @@ Netty那点事（一）概述
 * Zero-Copy-Capable Rich Byte Buffer
 
 	零拷贝的Buffer。为什么叫零拷贝？因为在数据传输时，最终处理的数据会需要对单个传输层的报文，进行组合或者拆分。NIO原生的ByteBuffer无法做到这件事，而Netty通过提供Composite(组合)和Slice(切分)两种Buffer来实现零拷贝。这部分代码在`org.jboss.netty.buffer`包中。
+	这里需要额外注意，不要和操作系统级别的Zero-Copy混淆了, 操作系统中的零拷贝主要是用户空间和内核空间之间的数据拷贝, NIO中通过DirectBuffer做了实现.
 
 * Universal Communication API
 	
