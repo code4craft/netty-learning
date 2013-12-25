@@ -53,6 +53,9 @@ Netty是Java世界知名的网络应用框架。本系列文章是Netty的源码
 twitter关于3.0与4.0中Channel Event的说明：
 [https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead](https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead)
 
+[@章炎-友盟](http://weibo.com/dirlt)的博客：
+[http://dirlt.com/netty.html](http://dirlt.com/netty.html)
+
 ## 使用Netty的开源项目：
 
 * ### [Dubbo](https://github.com/alibaba/dubbo)
