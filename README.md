@@ -56,6 +56,8 @@ twitter关于3.0与4.0中Channel Event的说明：
 [@章炎-友盟](http://weibo.com/dirlt)的博客：
 [http://dirlt.com/netty.html](http://dirlt.com/netty.html)
 
+[@李林锋hw](http://weibo.com/lilinfeng)的大作： [Netty5.0架构剖析和源码解读.pdf](http://vdisk.weibo.com/s/C9LV9iVqH13rW)
+
 ## 使用Netty的开源项目：
 
 * ### [Dubbo](https://github.com/alibaba/dubbo)
