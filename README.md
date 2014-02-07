@@ -22,20 +22,19 @@ Netty是Java世界知名的网络应用框架。本系列文章是Netty的源码
 
 ## 一、Netty的架构
 
-### [1.概述](https://github.com/code4craft/netty-learning/blob/master/ch1-overview.md)
-### [2.Netty中的buffer](https://github.com/code4craft/netty-learning/blob/master/ch2-buffer.md)
-### [3.Channel与Pipeline](https://github.com/code4craft/netty-learning/blob/master/ch3-pipeline.md)
-### [4.Channel与NIO](https://github.com/code4craft/netty-learning/blob/master/ch4-channel-lifecycle.md) *未完成*
-### [5.Channel与Reactor模式](https://github.com/code4craft/netty-learning/blob/master/ch5-channel-nio.md) *未完成*
-### [6.分门别类讲讲Handler](https://github.com/code4craft/netty-learning/blob/master/ch6-handler.md) *未完成*
+### [1.概述](posts/ch1-overview.md)
+### [2.Netty中的buffer](posts/ch2-buffer.md)
+### [3.Channel中的Pipeline](posts/ch3-pipeline.md)
+### [4.Channel与Reactor模式](posts/ch4-reactor.md)
+### [5.分门别类讲讲Handler](posts/ch6-handler.md) *未完成*
 
 ## 二、Netty中的特性与细节
 
-### [1.理解Netty中的异步](https://github.com/code4craft/netty-learning/blob/master/detail/ch1-async-in-netty.md) *未完成*
+### [1.理解Netty中的异步](posts/detail/ch1-async-in-netty.md) 
 
 ## 三、Netty实战
 
-### [1.构建一个socks proxy](https://github.com/code4craft/netty-learning/blob/master/socks-proxy-by-netty.md)
+### [1.构建一个socks proxy](posts/socks-proxy-by-netty.md)
 
 =========
 
@@ -81,10 +80,6 @@ twitter关于3.0与4.0中Channel Event的说明：
 相关代码遵循Apache V2协议。
 
 文档遵循CC-BYNC协议。
-
-## 贡献：
-
-你可以fork分支，修改后并提交pull request。pull request接受后，我会将你提升为项目commiter，并加入到贡献者名单里。
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/code4craft/netty-learning/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
