@@ -25,7 +25,7 @@ Netty是Java世界知名的网络应用框架。本系列文章是Netty的源码
 ### [1.概述](posts/ch1-overview.md)
 ### [2.Netty中的buffer](posts/ch2-buffer.md)
 ### [3.Channel中的Pipeline](posts/ch3-pipeline.md)
-### [4.Channel与Reactor模式](posts/ch4-reactor.md)
+### [4.Netty与Reactor模式](posts/ch4-reactor.md)
 ### [5.分门别类讲讲Handler](posts/ch6-handler.md) *未完成*
 
 ## 二、Netty中的特性与细节

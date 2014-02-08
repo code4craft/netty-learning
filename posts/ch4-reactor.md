@@ -1,4 +1,4 @@
-Netty那点事（四）Channel与Reactor模式
+Netty那点事（四）Netty与Reactor模式
 --------
 ![Reactors][1]
 
