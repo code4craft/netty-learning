@@ -78,8 +78,6 @@ abstract class AbstractNioSelector implements NioSelector {
     public void run() {
         for (;;) {
             try {
-                long beforeSelect = System.nanoTime();
-                int selected = select(selector);
                 //处理内部任务队列
                 processTaskQueue();
                 //处理selector事件对应逻辑
