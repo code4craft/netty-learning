@@ -54,6 +54,7 @@ public class HttpSnoopServerHandler extends SimpleChannelUpstreamHandler {
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+        System.out.println(Thread.currentThread().getName());
         if (!readingChunks) {
             HttpRequest request = this.request = (HttpRequest) e.getMessage();
 

@@ -38,7 +38,7 @@ public class HttpSnoopServer {
         ServerBootstrap bootstrap = new ServerBootstrap(
                 new NioServerSocketChannelFactory(
                         Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()));
+                        Executors.newFixedThreadPool(20)));
 
         // Enable TCP_NODELAY to handle pipelined requests without latency.
         bootstrap.setOption("child.tcpNoDelay", true);
