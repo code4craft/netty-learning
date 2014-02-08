@@ -144,11 +144,11 @@ abstract class AbstractNioSelector implements NioSelector {
 
 这不就是第二部分提到的selector经典用法了么？
 
-在4.0之后，作者觉得NioSelector，以及区分`NioBoss`和`NioWorker`的做法稍微繁琐了点，干脆就将这些合并成了`NioEventLoop`，从此这两个角色就不做区分了。我倒是觉得新版本的会更优雅一点。
+在4.0之后，作者觉得`NioSelector`这个叫法，以及区分`NioBoss`和`NioWorker`的做法稍微繁琐了点，干脆就将这些合并成了`NioEventLoop`，从此这两个角色就不做区分了。我倒是觉得新版本的会更优雅一点。
 
 ### 3、Netty中的多线程
 
-下面我们来看Netty的多线程部分。一旦对应的Boss或者Worker启动，就会分配给它们一个线程去一直执行。`BossPool`和`WorkerPool`中。对于每个`NioServerSocketChannel`，Boss的Reactor有一个线程，而Worker的线程数由Worker线程池大小决定，但是默认最大不会超过CPU核数*2，当然，这个参数可以通过`NioServerSocketChannelFactory`构造函数的参数来设置。
+下面我们来看Netty的多线程部分。一旦对应的Boss或者Worker启动，就会分配给它们一个线程去一直执行。对应的概念为`BossPool`和`WorkerPool`。对于每个`NioServerSocketChannel`，Boss的Reactor有一个线程，而Worker的线程数由Worker线程池大小决定，但是默认最大不会超过CPU核数*2，当然，这个参数可以通过`NioServerSocketChannelFactory`构造函数的参数来设置。
 
 ```java
     public NioServerSocketChannelFactory(
