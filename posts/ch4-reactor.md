@@ -142,7 +142,7 @@ abstract class AbstractNioSelector implements NioSelector {
 
 这不就是第二部分提到的selector经典用法了么？
 
-在4.0之后，作者觉得`NioSelector`这个叫法，以及区分`NioBoss`和`NioWorker`的做法稍微繁琐了点，干脆就将这些合并成了`NioEventLoop`，从此这两个角色就不做区分了。我倒是觉得新版本的会更优雅一点。
+在Netty 4.0之后，作者觉得`NioSelector`这个叫法，以及区分`NioBoss`和`NioWorker`的做法稍微繁琐了点，干脆就将这些合并成了`NioEventLoop`，从此这两个角色就不做区分了。我倒是觉得新版本的会更优雅一点。
 
 ### 3、Netty中的多线程
 
