@@ -46,7 +46,7 @@ Java中的NIO可以很好的和Reactor模式结合。关于NIO中的Reactor模�
 
 前面提到了Proactor模式，这又是什么呢？简单来说，Reactor模式里，操作系统只负责通知IO就绪，具体的IO操作（例如读写）仍然是要在业务进程里阻塞的去做的，而Proactor模式则更进一步，由操作系统将IO操作执行好（例如读取，会将数据直接读到内存buffer中），而handler只负责处理自己的逻辑，真正做到了IO与程序处理异步执行。所以我们一般又说Reactor是同步IO，Proactor是异步IO。
 
-关于阻塞和非阻塞、异步和非异步，以及UNIX底层的机制，大家可以看看这篇文章[IO - 同步，异步，阻塞，非阻塞 （亡羊补牢篇）](http://blog.csdn.net/historyasamirror/article/details/5778378)，以及陶辉（《深入理解nginx》的作者）[《高性能网络编程》]((http://blog.csdn.net/russell_tao/article/details/17452997))的系列。
+关于阻塞和非阻塞、异步和非异步，以及UNIX底层的机制，大家可以看看这篇文章[IO - 同步，异步，阻塞，非阻塞 （亡羊补牢篇）](http://blog.csdn.net/historyasamirror/article/details/5778378)，以及陶辉（《深入理解nginx》的作者）[《高性能网络编程》](http://blog.csdn.net/russell_tao/article/details/17452997)的系列。
 
 ## 三：由Reactor出发来理解Netty
 
