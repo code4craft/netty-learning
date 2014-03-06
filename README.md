@@ -46,6 +46,8 @@ Netty是Java世界知名的网络应用框架。本系列文章是Netty的源码
 《netty从入门到精通》:
 [http://cqupt123.iteye.com/blog/1682657](http://cqupt123.iteye.com/blog/1682657)
 
+[@kafka0102](http://weibo.com/kafka0102)的《Netty实现原理浅析》[http://www.kafka0102.com/2010/06/167.html](http://www.kafka0102.com/2010/06/167.html)
+
 [@OneCoder](http://weibo.com/kubicoder)的《Java NIO框架Netty教程》:
 [http://www.coderli.com/category/open-source/distributed/netty](http://www.coderli.com/category/open-source/distributed/netty)
 
