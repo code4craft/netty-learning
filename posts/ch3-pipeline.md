@@ -1,4 +1,4 @@
-Channel中的Pipeline
+Netty那点事（三）Channel中的Pipeline
 --------
 Channel是理解和使用Netty的核心。Channel的涉及内容较多，这里我使用由浅入深的介绍方法。在这篇文章中，我们主要介绍Channel部分中Pipeline实现机制。为了避免枯燥，借用一下《盗梦空间》的“梦境”概念，希望大家喜欢。
 
