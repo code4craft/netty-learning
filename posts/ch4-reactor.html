@@ -40,7 +40,7 @@
     </head>
     <body>
         
-<div class="book" data-github="code4craft/netty-learning" data-level="4" data-basepath=".." data-revision="1396882856970">
+<div class="book" data-github="code4craft/netty-learning" data-level="4" data-basepath=".." data-revision="1396887393495">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="https://github.com/code4craft/netty-learning" target="_blank" class="btn pull-left"><i class="fa fa-github-alt"></i></a>
@@ -156,7 +156,7 @@
                     <section class="normal" id="section-gitbook_5">
                     
                         <h2 id="netty-netty-reactor-">Netty那点事（四）Netty与Reactor模式</h2>
-<p>![Reactors][1]</p>
+<p><img src="http://static.oschina.net/uploads/space/2014/0208/164000_EQQb_190591.jpg" alt="Reactors"></p>
 <h2 id="-netty-nio-">一：Netty、NIO、多线程？</h2>
 <p>时隔很久终于又更新了！之前一直迟迟未动也是因为积累不够，后面比较难下手。过年期间<a href="http://weibo.com/lilinfeng" target="_blank">@李林锋hw</a>发布了一个Netty5.0架构剖析和源码解读 <a href="http://vdisk.weibo.com/s/C9LV9iVqH13rW/1391437855" target="_blank">http://vdisk.weibo.com/s/C9LV9iVqH13rW/1391437855</a>，看完也是收获不少。前面的文章我们分析了Netty的结构，这次咱们来分析最错综复杂的一部分-Netty中的多线程以及NIO的应用。</p>
 <p>理清NIO与Netty的关系之前，我们必须先要来看看Reactor模式。Netty是一个典型的多线程的Reactor模式的使用，理解了这部分，在宏观上理解Netty的NIO及多线程部分就不会有什么困难了。</p>
@@ -190,7 +190,7 @@
 <h3 id="1-reactor">1、多线程下的Reactor</h3>
 <p>讲了一堆Reactor，我们回到Netty。在《Scalable IO in Java》中讲到了一种多线程下的Reactor模式。在这个模式里，mainReactor只有一个，负责响应client的连接请求，并建立连接，它使用一个NIO Selector；subReactor可以有一个或者多个，每个subReactor都会在一个独立线程中执行，并且维护一个独立的NIO Selector。</p>
 <p>这样的好处很明显，因为subReactor也会执行一些比较耗时的IO操作，例如消息的读写，使用多个线程去执行，则更加有利于发挥CPU的运算能力，减少IO等待时间。</p>
-<p>![Multiple Reactors][2]</p>
+<p><img src="http://static.oschina.net/uploads/space/2013/1125/130828_uKWD_190591.jpeg" alt="Multiple Reactors"></p>
 <h3 id="2-netty-reactor-nio">2、Netty中的Reactor与NIO</h3>
 <p>好了，了解了多线程下的Reactor模式，我们来看看Netty吧（以下部分主要针对NIO，OIO部分更加简单一点，不重复介绍了）。Netty里对应mainReactor的角色叫做“Boss”，而对应subReactor的角色叫做&quot;Worker&quot;。Boss负责分配请求，Worker负责执行，好像也很贴切！以TCP的Server端为例，这两个对应的实现类分别为<code>NioServerBoss</code>和<code>NioWorker</code>（Server和Client的Worker没有区别，因为建立连接之后，双方就是对等的进行传输了）。</p>
 <p>Netty 3.7中Reactor的EventLoop在<code>AbstractNioSelector.run()</code>中，它实现了<code>Runnable</code>接口。这个类是Netty NIO部分的核心。它的逻辑非常复杂，其中还包括一些对JDK Bug的处理（例如<code>rebuildSelector</code>），刚开始读的时候不需要深入那么细节。我精简了大部分代码，保留主干如下：</p>

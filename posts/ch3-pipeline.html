@@ -40,7 +40,7 @@
     </head>
     <body>
         
-<div class="book" data-github="code4craft/netty-learning" data-level="3" data-basepath=".." data-revision="1396882856970">
+<div class="book" data-github="code4craft/netty-learning" data-level="3" data-basepath=".." data-revision="1396887393495">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="https://github.com/code4craft/netty-learning" target="_blank" class="btn pull-left"><i class="fa fa-github-alt"></i></a>
@@ -161,14 +161,14 @@
 <p>在Netty里，<code>Channel</code>是通讯的载体，而<code>ChannelHandler</code>负责Channel中的逻辑处理。</p>
 <p>那么<code>ChannelPipeline</code>是什么呢？我觉得可以理解为ChannelHandler的容器：一个Channel包含一个ChannelPipeline，所有ChannelHandler都会注册到ChannelPipeline中，并按顺序组织起来。</p>
 <p>在Netty中，<code>ChannelEvent</code>是数据或者状态的载体，例如传输的数据对应<code>MessageEvent</code>，状态的改变对应<code>ChannelStateEvent</code>。当对Channel进行操作时，会产生一个ChannelEvent，并发送到<code>ChannelPipeline</code>。ChannelPipeline会选择一个ChannelHandler进行处理。这个ChannelHandler处理之后，可能会产生新的ChannelEvent，并流转到下一个ChannelHandler。</p>
-<p>![channel pipeline][1]</p>
+<p><img src="http://static.oschina.net/uploads/space/2013/0921/174032_18rb_190591.png" alt="channel pipeline"></p>
 <p>例如，一个数据最开始是一个<code>MessageEvent</code>，它附带了一个未解码的原始二进制消息<code>ChannelBuffer</code>，然后某个Handler将其解码成了一个数据对象，并生成了一个新的<code>MessageEvent</code>，并传递给下一步进行处理。</p>
 <p>到了这里，可以看到，其实Channel的核心流程位于<code>ChannelPipeline</code>中。于是我们进入ChannelPipeline的深层梦境里，来看看它具体的实现。</p>
 <h2 id="-channelpipeline-">二层梦境：ChannelPipeline的主流程</h2>
 <p>Netty的ChannelPipeline包含两条线路：Upstream和Downstream。Upstream对应上行，接收到的消息、被动的状态改变，都属于Upstream。Downstream则对应下行，发送的消息、主动的状态改变，都属于Downstream。<code>ChannelPipeline</code>接口包含了两个重要的方法:<code>sendUpstream(ChannelEvent e)</code>和<code>sendDownstream(ChannelEvent e)</code>，就分别对应了Upstream和Downstream。</p>
 <p>对应的，ChannelPipeline里包含的ChannelHandler也包含两类：<code>ChannelUpstreamHandler</code>和<code>ChannelDownstreamHandler</code>。每条线路的Handler是互相独立的。它们都很简单的只包含一个方法：<code>ChannelUpstreamHandler.handleUpstream</code>和<code>ChannelDownstreamHandler.handleDownstream</code>。</p>
 <p>Netty官方的javadoc里有一张图(<code>ChannelPipeline</code>接口里)，非常形象的说明了这个机制(我对原图进行了一点修改，加上了<code>ChannelSink</code>，因为我觉得这部分对理解代码流程会有些帮助)：</p>
-<p>![channel pipeline][2]</p>
+<p><img src="http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png" alt="channel pipeline"></p>
 <p>什么叫<code>ChannelSink</code>呢？ChannelSink包含一个重要方法<code>ChannelSink.eventSunk</code>，可以接受任意ChannelEvent。&quot;sink&quot;的意思是&quot;下沉&quot;，那么&quot;ChannelSink&quot;好像可以理解为&quot;Channel下沉的地方&quot;？实际上，它的作用确实是这样，也可以换个说法：&quot;处于末尾的万能Handler&quot;。最初读到这里，也有些困惑，这么理解之后，就感觉简单许多。<strong>只有Downstream包含<code>ChannelSink</code></strong>，这里会做一些建立连接、绑定端口等重要操作。为什么UploadStream没有ChannelSink呢？我只能认为，一方面，不符合&quot;sink&quot;的意义，另一方面，也没有什么处理好做的吧！</p>
 <p>这里有个值得注意的地方：在一条“流”里，一个<code>ChannelEvent</code>并不会主动的&quot;流&quot;经所有的Handler，而是由<strong>上一个Handler显式的调用<code>ChannelPipeline.sendUp(Down)stream</code>产生，并交给下一个Handler处理</strong>。也就是说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用<code>sendUp(Down)stream</code>新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。</p>
 <p>顺便说一句，在Netty 3.x里，这个机制会导致大量的ChannelEvent对象创建，因此Netty 4.x版本对此进行了改进。twitter的<a href="https://github.com/twitter/finagle" target="_blank">finagle</a>框架实践中，就提到从Netty 3.x升级到Netty 4.x，可以大大降低GC开销。有兴趣的可以看看这篇文章：<a href="https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead" target="_blank">https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead</a></p>
@@ -236,7 +236,7 @@
 <p>我认为至少有两点：</p>
 <p>一是提供了ChannelHandler的编程模型，基于ChannelHandler开发业务逻辑，基本不需要关心网络通讯方面的事情，专注于编码/解码/逻辑处理就可以了。Handler也是比较方便的开发模式，在很多框架中都有用到。</p>
 <p>二是实现了所谓的&quot;Universal Asynchronous API&quot;。这也是Netty官方标榜的一个功能。用过OIO和NIO的都知道，这两套API风格相差极大，要从一个迁移到另一个成本是很大的。即使是NIO，异步和同步编程差距也很大。而Netty屏蔽了OIO和NIO的API差异，通过Channel提供对外接口，并通过ChannelPipeline将其连接起来，因此替换起来非常简单。</p>
-<p>![universal API][3]</p>
+<p><img src="http://static.oschina.net/uploads/space/2013/1124/001528_TBb5_190591.jpg" alt="universal API"></p>
 <p>理清了ChannelPipeline的主流程，我们对Channel部分的大致结构算是弄清楚了。可是到了这里，我们依然对一个连接具体怎么处理没有什么概念，下篇文章，我们会分析一下，在Netty中，捷径如何处理连接的建立、数据的传输这些事情。</p>
 <p>PS: Pipeline这部分拖了两个月，终于写完了。中间写的实在缓慢，写个高质量(至少是自认为吧！)的文章不容易，但是仍不忍心这部分就此烂尾。中间参考了一些优秀的文章，还自己使用netty开发了一些应用。以后这类文章，还是要集中时间来写完好了。</p>
 <p>参考资料：</p>
