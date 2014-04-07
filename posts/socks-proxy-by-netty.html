@@ -1,0 +1,402 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head prefix="og: http://ogp.me/ns# book: http://ogp.me/ns/book#">
+        
+        <meta charset="UTF-8">
+        <title>Netty实战:构建一个socks proxy | Netty-learning</title>
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="robots" content="index, follow">
+        <meta name="author" content="code4craft">
+        <meta name="description" content="">
+        <meta name="keywords" content="gitbook,github" >
+        <meta name="generator" content="www.gitbook.io">
+
+        
+        
+        <link rel="prev" href="../posts/ch4-reactor.html" />
+        
+
+        <meta property="og:title" content="Netty实战:构建一个socks proxy | Netty-learning">
+        <meta property="og:site_name" content="Netty-learning">
+        <meta property="og:type" content="book">
+        <meta property="og:locale" content="en_US">
+
+        <meta property="book:author" content="https://github.com/code4craft">
+        <meta property="book:tag" content="GitBook">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+        
+        <link rel="stylesheet" href="../gitbook/style.css">
+        
+        
+    </head>
+    <body>
+        
+<div class="book" data-github="code4craft/netty-learning" data-level="5" data-basepath=".." data-revision="1396882648742">
+    <div class="book-header">
+    <!-- Actions Left -->
+    <a href="https://github.com/code4craft/netty-learning" target="_blank" class="btn pull-left"><i class="fa fa-github-alt"></i></a>
+    <a href="#" class="btn pull-left toggle-summary"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search"><i class="fa fa-search"></i></a>
+
+    <!-- Actions Right -->
+    <a href="#" target="_blank" class="btn pull-right" data-sharing="google-plus"><i class="fa fa-google-plus"></i></a>
+    <a href="#" target="_blank" class="btn pull-right" data-sharing="facebook"><i class="fa fa-facebook"></i></a>
+    <a href="#" target="_blank" class="btn pull-right" data-sharing="twitter"><i class="fa fa-twitter"></i></a>
+
+    <a href="https://github.com/code4craft/netty-learning/stargazers" target="_blank" class="btn pull-right count-star"><i class="fa fa-star-o"></i> Star (<span>-</span>)</a>
+    <a href="https://github.com/code4craft/netty-learning/watchers" target="_blank" class="btn pull-right count-watch"><i class="fa fa-eye"></i> Watch (<span>-</span>)</a>
+
+
+    <!-- Title -->
+    <h1><a href="../" >Netty-learning</a></h1>
+</div>
+
+    <div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Search" class="form-control" />
+    </div>
+    <ul class="summary">
+        <li>
+            <a href="https://github.com/code4craft" target="blank">About the author</a>
+        </li>
+        <li>
+            <a href="https://github.com/code4craft/netty-learning/issues" target="blank">Questions and Issues</a>
+        </li>
+        <li>
+            <a href="https://github.com/code4craft/netty-learning/edit/master/posts/socks-proxy-by-netty.md" target="blank">Edit and Contribute</a>
+        </li>
+        <li class="divider"></li>
+        <li data-level="0" data-path="index.html">
+            <a href="../"><i class="fa fa-check"></i> Introduction</a>
+        </li>
+        
+            <li  data-level="1" data-path="posts/ch1-overview.html">
+                
+                <a href="../posts/ch1-overview.html">
+                    <i class="fa fa-check"></i> <b>1)</b> Netty概述
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="2" data-path="posts/ch2-buffer.html">
+                
+                <a href="../posts/ch2-buffer.html">
+                    <i class="fa fa-check"></i> <b>2)</b> Netty中的buffer
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="3" data-path="posts/ch3-pipeline.html">
+                
+                <a href="../posts/ch3-pipeline.html">
+                    <i class="fa fa-check"></i> <b>3)</b> Channel中的Pipeline
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="4" data-path="posts/ch4-reactor.html">
+                
+                <a href="../posts/ch4-reactor.html">
+                    <i class="fa fa-check"></i> <b>4)</b> Netty与Reactor模式
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="5" data-path="posts/socks-proxy-by-netty.html">
+                
+                <a href="../posts/socks-proxy-by-netty.html">
+                    <i class="fa fa-check"></i> <b>5)</b> Netty实战:构建一个socks proxy
+                </a>
+                
+                
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body" tabindex="-1">
+        <div class="body-inner">
+            <div class="page-wrapper">
+                <div class="book-progress">
+    <div class="bar">
+        <div class="inner" style="width: 100%;min-width: 80%;"></div>
+    </div>
+    <div class="chapters">
+    
+        <a href="../index.html" title="Introduction" class="chapter done new-chapter" data-progress="0" style="left: 0%;"></a>
+    
+        <a href="../posts/ch1-overview.html" title="Netty概述" class="chapter done new-chapter" data-progress="1" style="left: 20%;"></a>
+    
+        <a href="../posts/ch2-buffer.html" title="Netty中的buffer" class="chapter done new-chapter" data-progress="2" style="left: 40%;"></a>
+    
+        <a href="../posts/ch3-pipeline.html" title="Channel中的Pipeline" class="chapter done new-chapter" data-progress="3" style="left: 60%;"></a>
+    
+        <a href="../posts/ch4-reactor.html" title="Netty与Reactor模式" class="chapter done new-chapter" data-progress="4" style="left: 80%;"></a>
+    
+        <a href="../posts/socks-proxy-by-netty.html" title="Netty实战:构建一个socks proxy" class="chapter done new-chapter" data-progress="5" style="left: 100%;"></a>
+    
+    </div>
+</div>
+
+                <div class="page-inner">
+                
+                    <section class="normal" id="section-gitbook_6">
+                    
+                        <h2 id="-netty-netty-socks-proxy">【netty实战】使用netty构建一个socks proxy</h2>
+<p>最近在做的项目，需要自己搭建一个socks代理。netty4.0附带了一个socks代理的样例，但是3.x就没有这个东西了，碰巧使用的又是3.7，就只能自己摸索并实现一遍，也算是对netty和socks协议的一个熟悉。
+socks代理涉及到协议解析、server、client等功能，是一个比较复杂的网络程序，对于学习netty的使用也是非常好的例子。</p>
+<p>socks是在传输层之上的一层协议，主要功能是提供代理认证等功能。socks协议虽然是应用层协议(在TCP/IP4层协议栈里)，本身可以理解为一个信道，可以传输任何TCP/UDP内容。例如著名的科学上网软件就是基于socks协议，对通信内容进行加密实现的。</p>
+<p>TCP/IP协议栈的结构中，下层协议总会在上层协议内容之前加上自己的头。而socks协议稍微不同，其实它对比TCP协议，仅仅是多了验证部分，验证之后，完全是使用TCP来进行传输，而没有socks报文头。socks协议的具体内容可以参考<a href="http://www.ietf.org/rfc/rfc1928.txt" target="_blank">rfc1928</a>。这一点来说，其实将socks理解成与其他应用层协议平级也没什么问题。</p>
+<p>一个最基本的socks连接流程是这样的：
+![socks][1]</p>
+<p>那么我们开始netty之旅吧。</p>
+<p>首先我们需要建立一个server：</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span>() {
+
+        <span class="hljs-comment">// 新建线程池</span>
+        Executor executor = Executors.newCachedThreadPool();
+        Executor executorWorker = Executors.newCachedThreadPool();
+        ServerBootstrap sb = <span class="hljs-keyword">new</span> ServerBootstrap(
+                <span class="hljs-keyword">new</span> NioServerSocketChannelFactory(executor, executorWorker));
+
+        <span class="hljs-comment">// 初始化代理部分使用的client</span>
+        ClientSocketChannelFactory cf =
+                <span class="hljs-keyword">new</span> NioClientSocketChannelFactory(executor, executorWorker);
+
+        <span class="hljs-comment">//设置处理逻辑</span>
+        sb.setPipelineFactory(
+                <span class="hljs-keyword">new</span> SocksProxyPipelineFactory(cf));
+
+        <span class="hljs-comment">// Start up the server.</span>
+        sb.bind(<span class="hljs-keyword">new</span> InetSocketAddress(<span class="hljs-number">1080</span>));
+    }
+</code></pre>
+<p>如你所见，主要的处理逻辑以SocksProxyPipelineFactory的形式提供。SocksProxyPipelineFactory的代码包括几部分：</p>
+<pre><code class="lang-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SocksProxyPipelineFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">ChannelPipelineFactory</span> {</span>
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ClientSocketChannelFactory cf;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-title">SocksProxyPipelineFactory</span>(ClientSocketChannelFactory cf) {
+        <span class="hljs-keyword">this</span>.cf = cf;
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">public</span> ChannelPipeline <span class="hljs-title">getPipeline</span>() <span class="hljs-keyword">throws</span> Exception {
+        ChannelPipeline pipeline = Channels.pipeline();
+        pipeline.addLast(SocksInitRequestDecoder.getName(),<span class="hljs-keyword">new</span> SocksInitRequestDecoder());
+        pipeline.addLast(SocksMessageEncoder.getName(),<span class="hljs-keyword">new</span> SocksMessageEncoder());
+        pipeline.addLast(SocksServerHandler.getName(),<span class="hljs-keyword">new</span> SocksServerHandler(cf));
+        <span class="hljs-keyword">return</span> pipeline;
+    }
+}
+</code></pre>
+<p>这里要详细解释一下几个handler的作用：</p>
+<p><code>ChannelUpstreamHandler</code>用于接收之后的处理，而<code>ChannelDownstreamHandler</code>则相反，用于写入数据之后的处理。这两个都可以附加到<code>ChannelPipeline</code>中。偷个懒，直接附上netty的ChannelPipeline中的一段很有爱的javadoc：</p>
+<pre><code>                                      I/O Request
+                                    via {@link Channel} or
+                                {@link ChannelHandlerContext}
+                                          <span class="hljs-string">|</span>
+ +----------------------------------------+---------------+
+ <span class="hljs-string">|                  ChannelPipeline       |               |</span>
+ <span class="hljs-string">|                                       \|/              |</span>
+ <span class="hljs-string">|  +----------------------+  +-----------+------------+  |</span>
+ <span class="hljs-string">|  | Upstream Handler  N  |  | Downstream Handler  1  |  |</span>
+ <span class="hljs-string">|  +----------+-----------+  +-----------+------------+  |</span>
+ <span class="hljs-string">|            /|\                         |               |</span>
+ <span class="hljs-string">|             |                         \|/              |</span>
+ <span class="hljs-string">|  +----------+-----------+  +-----------+------------+  |</span>
+ <span class="hljs-string">|  | Upstream Handler N-1 |  | Downstream Handler  2  |  |</span>
+ <span class="hljs-string">|  +----------+-----------+  +-----------+------------+  |</span>
+ <span class="hljs-string">|            /|\                         .               |</span>
+ <span class="hljs-string">|             .                          .               |</span>
+ <span class="hljs-string">|     [ sendUpstream() ]        [ sendDownstream() ]     |</span>
+ <span class="hljs-string">|     [ + INBOUND data ]        [ + OUTBOUND data  ]     |</span>
+ <span class="hljs-string">|             .                          .               |</span>
+ <span class="hljs-string">|             .                         \|/              |</span>
+ <span class="hljs-string">|  +----------+-----------+  +-----------+------------+  |</span>
+ <span class="hljs-string">|  | Upstream Handler  2  |  | Downstream Handler M-1 |  |</span>
+ <span class="hljs-string">|  +----------+-----------+  +-----------+------------+  |</span>
+ <span class="hljs-string">|            /|\                         |               |</span>
+ <span class="hljs-string">|             |                         \|/              |</span>
+ <span class="hljs-string">|  +----------+-----------+  +-----------+------------+  |</span>
+ <span class="hljs-string">|  | Upstream Handler  1  |  | Downstream Handler  M  |  |</span>
+ <span class="hljs-string">|  +----------+-----------+  +-----------+------------+  |</span>
+ <span class="hljs-string">|            /|\                         |               |</span>
+ +-------------+--------------------------+---------------+
+               <span class="hljs-string">|                         \|/</span>
+ +-------------+--------------------------+---------------+
+ <span class="hljs-string">|             |                          |               |</span>
+ <span class="hljs-string">|     [ Socket.read() ]          [ Socket.write() ]      |</span>
+ <span class="hljs-string">|                                                        |</span>
+ <span class="hljs-string">|  Netty Internal I/O Threads (Transport Implementation) |</span>
+ +--------------------------------------------------------+
+</code></pre><p><code>SocksInitRequestDecoder</code>用于对socks的请求进行解码。你可能会说，为什么没有SocksCmdRequest的解码？别急，netty的handler是可以动态添加的，这里我们先解码一个初始化的请求。SocksInitRequestDecoder是一个<code>ChannelUpstreamHandler</code>，即接收流的处理器。</p>
+<p><code>SocksMessageEncoder</code>是一个<code>ChannelDownstreamHandler</code>，即输出时的编码器，有了它，我们可以很开心的在channel.write()里直接传入一个对象，而无需自己去写buffer了。</p>
+<p><code>SocksServerHandler</code>是处理的重头。这里会根据请求的不同类型，做不同的处理。</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">messageReceived</span>(ChannelHandlerContext ctx, MessageEvent e) <span class="hljs-keyword">throws</span> Exception {
+        SocksRequest socksRequest = (SocksRequest) e.getMessage();
+        <span class="hljs-keyword">switch</span> (socksRequest.getSocksRequestType()) {
+        <span class="hljs-keyword">case</span> INIT:
+            <span class="hljs-comment">//添加cmd解码器</span>
+            ctx.getPipeline().addFirst(SocksCmdRequestDecoder.getName(), <span class="hljs-keyword">new</span> SocksCmdRequestDecoder());
+            <span class="hljs-comment">//简单起见，无需认证</span>
+            ctx.getChannel().write(<span class="hljs-keyword">new</span> SocksInitResponse(SocksMessage.AuthScheme.NO_AUTH));
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> AUTH:
+            ctx.getPipeline().addFirst(SocksCmdRequestDecoder.getName(), <span class="hljs-keyword">new</span> SocksCmdRequestDecoder());
+            <span class="hljs-comment">//直接成功</span>
+            ctx.getChannel().write(<span class="hljs-keyword">new</span> SocksAuthResponse(SocksMessage.AuthStatus.SUCCESS));
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> CMD:
+            SocksCmdRequest req = (SocksCmdRequest) socksRequest;
+            <span class="hljs-keyword">if</span> (req.getCmdType() == SocksMessage.CmdType.CONNECT) {
+                <span class="hljs-comment">//添加处理连接的handler</span>
+                ctx.getPipeline().addLast(SocksServerConnectHandler.getName(), <span class="hljs-keyword">new</span> SocksServerConnectHandler(cf));
+                ctx.getPipeline().remove(<span class="hljs-keyword">this</span>);
+            } <span class="hljs-keyword">else</span> {
+                ctx.getChannel().close();
+            }
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> UNKNOWN:
+            <span class="hljs-keyword">break</span>;
+        }
+        <span class="hljs-keyword">super</span>.messageReceived(ctx, e);
+    }
+</code></pre>
+<p>前面两种INIT和AUTH就不做赘述了，后面当CMD为Connect时，添加一个处理连接的<code>SocksServerConnectHandler</code>，它会起到client与外部server的桥梁作用。</p>
+<p>这里我们先实现一个纯转发的handler-<code>OutboundHandler</code>:</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">private</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OutboundHandler</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">SimpleChannelUpstreamHandler</span> {</span>
+
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Channel inboundChannel;
+
+        OutboundHandler(Channel inboundChannel) {
+            <span class="hljs-keyword">this</span>.inboundChannel = inboundChannel;
+        }
+
+        <span class="hljs-annotation">@Override</span>
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">messageReceived</span>(ChannelHandlerContext ctx, <span class="hljs-keyword">final</span> MessageEvent e) <span class="hljs-keyword">throws</span> Exception {
+            <span class="hljs-keyword">final</span> ChannelBuffer msg = (ChannelBuffer) e.getMessage();
+            <span class="hljs-keyword">synchronized</span> (trafficLock) {
+                inboundChannel.write(msg);
+
+            }
+        }
+    }
+</code></pre>
+<p>它会把收到的内容，写入到<code>inboundChannel</code>中，其他转发的作用。最后就是我们的<code>SocksServerConnectHandler</code>了:</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SocksServerConnectHandler</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">SimpleChannelUpstreamHandler</span> {</span>
+
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ClientSocketChannelFactory cf;
+
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> Channel outboundChannel;
+
+        <span class="hljs-keyword">final</span> Object trafficLock = <span class="hljs-keyword">new</span> Object();
+
+        <span class="hljs-keyword">public</span> <span class="hljs-title">SocksServerConnectHandler</span>(ClientSocketChannelFactory cf) {
+            <span class="hljs-keyword">this</span>.cf = cf;
+        }
+
+        <span class="hljs-annotation">@Override</span>
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">messageReceived</span>(ChannelHandlerContext ctx, MessageEvent e) <span class="hljs-keyword">throws</span> Exception {
+            <span class="hljs-keyword">final</span> SocksCmdRequest socksCmdRequest = (SocksCmdRequest) e.getMessage();
+            <span class="hljs-keyword">final</span> Channel inboundChannel = e.getChannel();
+            inboundChannel.setReadable(<span class="hljs-keyword">false</span>);
+
+            <span class="hljs-comment">// Start the connection attempt.</span>
+            <span class="hljs-keyword">final</span> ClientBootstrap cb = <span class="hljs-keyword">new</span> ClientBootstrap(cf);
+            cb.setOption(<span class="hljs-string">"keepAlive"</span>, <span class="hljs-keyword">true</span>);
+            cb.setOption(<span class="hljs-string">"tcpNoDelay"</span>, <span class="hljs-keyword">true</span>);
+            cb.setPipelineFactory(<span class="hljs-keyword">new</span> ChannelPipelineFactory() {
+                <span class="hljs-annotation">@Override</span>
+                <span class="hljs-keyword">public</span> ChannelPipeline <span class="hljs-title">getPipeline</span>() <span class="hljs-keyword">throws</span> Exception {
+                    ChannelPipeline pipeline = Channels.pipeline();
+                    <span class="hljs-comment">// 外部server数据转发到client</span>
+                    pipeline.addLast(<span class="hljs-string">"outboundChannel"</span>, <span class="hljs-keyword">new</span> OutboundHandler(inboundChannel, <span class="hljs-string">"out"</span>));
+                    <span class="hljs-keyword">return</span> pipeline;
+                }
+            });
+
+            ChannelFuture f = cb.connect(<span class="hljs-keyword">new</span> InetSocketAddress(socksCmdRequest.getHost(), socksCmdRequest.getPort()));
+
+            outboundChannel = f.getChannel();
+            ctx.getPipeline().remove(getName());
+            f.addListener(<span class="hljs-keyword">new</span> ChannelFutureListener() {
+                <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">operationComplete</span>(ChannelFuture future) <span class="hljs-keyword">throws</span> Exception {
+                    <span class="hljs-keyword">if</span> (future.isSuccess()) {
+                        <span class="hljs-comment">// client数据转发到外部server</span>
+                        inboundChannel.getPipeline().addLast(<span class="hljs-string">"inboundChannel"</span>, <span class="hljs-keyword">new</span> OutboundHandler(outboundChannel, <span class="hljs-string">"in"</span>));
+                        inboundChannel.write(<span class="hljs-keyword">new</span> SocksCmdResponse(SocksMessage.CmdStatus.SUCCESS, socksCmdRequest
+                                .getAddressType()));
+                        inboundChannel.setReadable(<span class="hljs-keyword">true</span>);
+                    } <span class="hljs-keyword">else</span> {
+                        inboundChannel.write(<span class="hljs-keyword">new</span> SocksCmdResponse(SocksMessage.CmdStatus.FAILURE, socksCmdRequest
+                                .getAddressType()));
+                        inboundChannel.close();
+                    }
+                }
+            });
+        }
+    }
+</code></pre>
+<p>好了，完工！输入<code>curl --socks5 127.0.0.1:1080 http://www.oschina.net/</code>测试一下吧？但是测试时发现，怎么老是无法接收到响应？</p>
+<p>使用wiredshark抓包之后，发现对外请求完全正常，但是对客户端的响应，则完全没有http响应部分？</p>
+<p>一步步debug下去，才发现<code>SocksMessageEncoder</code>出了问题！</p>
+<pre><code class="lang-java">    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> Object <span class="hljs-title">encode</span>(ChannelHandlerContext ctx, Channel channel, Object msg) <span class="hljs-keyword">throws</span> Exception {
+        ChannelBuffer buffer = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">if</span> (msg <span class="hljs-keyword">instanceof</span> SocksMessage) {
+            buffer = ChannelBuffers.buffer(DEFAULT_ENCODER_BUFFER_SIZE);
+            ((SocksMessage) msg).encodeAsByteBuf(buffer);
+        } 
+        <span class="hljs-keyword">return</span> buffer;
+    }
+</code></pre>
+<p>这里只有SocksMessage才会被处理，其他的message全部被丢掉了！于是我们加上一行:</p>
+<pre><code class="lang-java">    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> Object <span class="hljs-title">encode</span>(ChannelHandlerContext ctx, Channel channel, Object msg) <span class="hljs-keyword">throws</span> Exception {
+        ChannelBuffer buffer = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">if</span> (msg <span class="hljs-keyword">instanceof</span> SocksMessage) {
+            buffer = ChannelBuffers.buffer(DEFAULT_ENCODER_BUFFER_SIZE);
+            ((SocksMessage) msg).encodeAsByteBuf(buffer);
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (msg <span class="hljs-keyword">instanceof</span> ChannelBuffer) {
+            <span class="hljs-comment">//直接转发是ChannelBuffer类型</span>
+            buffer = (ChannelBuffer) msg;
+        }
+        <span class="hljs-keyword">return</span> buffer;
+    }
+</code></pre>
+<p>至此，一个代理完成！点这里查看代码：<a href="https://github.com/code4craft/netty-learning/tree/master/learning-src/socksproxy" target="_blank">https://github.com/code4craft/netty-learning/tree/master/learning-src/socksproxy</a></p>
+
+                    
+                    </section>
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../posts/ch4-reactor.html" class="navigation navigation-prev"><i class="fa fa-angle-left"></i></a>
+        
+        
+    </div>
+</div>
+
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/mode-javascript.js"></script>
+        <script src="../gitbook/jsrepl/jsrepl.js" id="jsrepl-script"></script>
+        <script src="../gitbook/app.js"></script>
+        
+    </body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head prefix="og: http://ogp.me/ns# book: http://ogp.me/ns/book#">
+        
+        <meta charset="UTF-8">
+        <title>Netty中的buffer | Netty-learning</title>
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="robots" content="index, follow">
+        <meta name="author" content="code4craft">
+        <meta name="description" content="">
+        <meta name="keywords" content="gitbook,github" >
+        <meta name="generator" content="www.gitbook.io">
+
+        
+        <link rel="next" href="../posts/ch3-pipeline.html" />
+        
+        
+        <link rel="prev" href="../posts/ch1-overview.html" />
+        
+
+        <meta property="og:title" content="Netty中的buffer | Netty-learning">
+        <meta property="og:site_name" content="Netty-learning">
+        <meta property="og:type" content="book">
+        <meta property="og:locale" content="en_US">
+
+        <meta property="book:author" content="https://github.com/code4craft">
+        <meta property="book:tag" content="GitBook">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+        
+        <link rel="stylesheet" href="../gitbook/style.css">
+        
+        
+    </head>
+    <body>
+        
+<div class="book" data-github="code4craft/netty-learning" data-level="2" data-basepath=".." data-revision="1396882648742">
+    <div class="book-header">
+    <!-- Actions Left -->
+    <a href="https://github.com/code4craft/netty-learning" target="_blank" class="btn pull-left"><i class="fa fa-github-alt"></i></a>
+    <a href="#" class="btn pull-left toggle-summary"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search"><i class="fa fa-search"></i></a>
+
+    <!-- Actions Right -->
+    <a href="#" target="_blank" class="btn pull-right" data-sharing="google-plus"><i class="fa fa-google-plus"></i></a>
+    <a href="#" target="_blank" class="btn pull-right" data-sharing="facebook"><i class="fa fa-facebook"></i></a>
+    <a href="#" target="_blank" class="btn pull-right" data-sharing="twitter"><i class="fa fa-twitter"></i></a>
+
+    <a href="https://github.com/code4craft/netty-learning/stargazers" target="_blank" class="btn pull-right count-star"><i class="fa fa-star-o"></i> Star (<span>-</span>)</a>
+    <a href="https://github.com/code4craft/netty-learning/watchers" target="_blank" class="btn pull-right count-watch"><i class="fa fa-eye"></i> Watch (<span>-</span>)</a>
+
+
+    <!-- Title -->
+    <h1><a href="../" >Netty-learning</a></h1>
+</div>
+
+    <div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Search" class="form-control" />
+    </div>
+    <ul class="summary">
+        <li>
+            <a href="https://github.com/code4craft" target="blank">About the author</a>
+        </li>
+        <li>
+            <a href="https://github.com/code4craft/netty-learning/issues" target="blank">Questions and Issues</a>
+        </li>
+        <li>
+            <a href="https://github.com/code4craft/netty-learning/edit/master/posts/ch2-buffer.md" target="blank">Edit and Contribute</a>
+        </li>
+        <li class="divider"></li>
+        <li data-level="0" data-path="index.html">
+            <a href="../"><i class="fa fa-check"></i> Introduction</a>
+        </li>
+        
+            <li  data-level="1" data-path="posts/ch1-overview.html">
+                
+                <a href="../posts/ch1-overview.html">
+                    <i class="fa fa-check"></i> <b>1)</b> Netty概述
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="2" data-path="posts/ch2-buffer.html">
+                
+                <a href="../posts/ch2-buffer.html">
+                    <i class="fa fa-check"></i> <b>2)</b> Netty中的buffer
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="3" data-path="posts/ch3-pipeline.html">
+                
+                <a href="../posts/ch3-pipeline.html">
+                    <i class="fa fa-check"></i> <b>3)</b> Channel中的Pipeline
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="4" data-path="posts/ch4-reactor.html">
+                
+                <a href="../posts/ch4-reactor.html">
+                    <i class="fa fa-check"></i> <b>4)</b> Netty与Reactor模式
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="5" data-path="posts/socks-proxy-by-netty.html">
+                
+                <a href="../posts/socks-proxy-by-netty.html">
+                    <i class="fa fa-check"></i> <b>5)</b> Netty实战:构建一个socks proxy
+                </a>
+                
+                
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body" tabindex="-1">
+        <div class="body-inner">
+            <div class="page-wrapper">
+                <div class="book-progress">
+    <div class="bar">
+        <div class="inner" style="width: 40%;min-width: 20%;"></div>
+    </div>
+    <div class="chapters">
+    
+        <a href="../index.html" title="Introduction" class="chapter done new-chapter" data-progress="0" style="left: 0%;"></a>
+    
+        <a href="../posts/ch1-overview.html" title="Netty概述" class="chapter done new-chapter" data-progress="1" style="left: 20%;"></a>
+    
+        <a href="../posts/ch2-buffer.html" title="Netty中的buffer" class="chapter done new-chapter" data-progress="2" style="left: 40%;"></a>
+    
+        <a href="../posts/ch3-pipeline.html" title="Channel中的Pipeline" class="chapter  new-chapter" data-progress="3" style="left: 60%;"></a>
+    
+        <a href="../posts/ch4-reactor.html" title="Netty与Reactor模式" class="chapter  new-chapter" data-progress="4" style="left: 80%;"></a>
+    
+        <a href="../posts/socks-proxy-by-netty.html" title="Netty实战:构建一个socks proxy" class="chapter  new-chapter" data-progress="5" style="left: 100%;"></a>
+    
+    </div>
+</div>
+
+                <div class="page-inner">
+                
+                    <section class="normal" id="section-gitbook_3">
+                    
+                        <h2 id="netty-netty-buffer">Netty那点事（二）Netty中的buffer</h2>
+<p>上一篇文章我们概要介绍了Netty的原理及结构，下面几篇文章我们开始对Netty的各个模块进行比较详细的分析。Netty的结构最底层是buffer机制，这部分也相对独立，我们就先从buffer讲起。</p>
+<h2 id="what-buffer-">What：buffer二三事</h2>
+<p>buffer中文名又叫缓冲区，按照维基百科的解释，是&quot;在数据传输时，在内存里开辟的一块临时保存数据的区域&quot;。它其实是一种化同步为异步的机制，可以解决数据传输的速率不对等以及不稳定的问题。</p>
+<p>根据这个定义，我们可以知道涉及I/O(特别是I/O写)的地方，基本会有Buffer了。就Java来说，我们非常熟悉的Old I/O--<code>InputStream</code>&amp;<code>OutputStream</code>系列API，基本都是在内部使用到了buffer。Java课程老师就教过，必须调用<code>OutputStream.flush()</code>，才能保证数据写入生效！</p>
+<p>而NIO中则直接将buffer这个概念封装成了对象，其中最常用的大概是ByteBuffer了。于是使用方式变为了：将数据写入Buffer，flip()一下，然后将数据读出来。于是，buffer的概念更加深入人心了！</p>
+<p>Netty中的buffer也不例外。不同的是，Netty的buffer专为网络通讯而生，所以它又叫ChannelBuffer(好吧其实没有什么因果关系…)。我们下面就来讲讲Netty中得buffer。当然，关于Netty，我们必须讲讲它的所谓&quot;Zero-Copy-Capable&quot;机制。</p>
+<h2 id="when-where-tcp-ip-buffer">When &amp; Where：TCP/IP协议与buffer</h2>
+<p>TCP/IP协议是目前的主流网络协议。它是一个多层协议，最下层是物理层，最上层是应用层(HTTP协议等)，而做Java应用开发，一般只接触TCP以上，即传输层和应用层的内容。这也是Netty的主要应用场景。</p>
+<p>TCP报文有个比较大的特点，就是它传输的时候，会先把应用层的数据项拆开成字节，然后按照自己的传输需要，选择合适数量的字节进行传输。什么叫&quot;自己的传输需要&quot;？首先TCP包有最大长度限制，那么太大的数据项肯定是要拆开的。其次因为TCP以及下层协议会附加一些协议头信息，如果数据项太小，那么可能报文大部分都是没有价值的头信息，这样传输是很不划算的。因此有了收集一定数量的小数据，并打包传输的Nagle算法(这个东东在HTTP协议里会很讨厌，Netty里可以用setOption(&quot;tcpNoDelay&quot;, true)关掉它)。</p>
+<p>这么说可能太学院派了一点，我们举个例子吧：</p>
+<p>发送时，我们这样分3次写入(&#39;|&#39;表示两个buffer的分隔):</p>
+<pre><code>   <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>
+   <span class="hljs-comment">|</span> <span class="hljs-comment">ABC</span> <span class="hljs-comment">|</span> <span class="hljs-comment">DEF</span> <span class="hljs-comment">|</span> <span class="hljs-comment">GHI</span> <span class="hljs-comment">|</span>
+   <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>
+</code></pre><p>接收时，可能变成了这样:</p>
+<pre><code>   <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>
+   <span class="hljs-comment">|</span> <span class="hljs-comment">AB</span> <span class="hljs-comment">|</span> <span class="hljs-comment">CDEFG</span> <span class="hljs-comment">|</span> <span class="hljs-comment">H</span> <span class="hljs-comment">|</span> <span class="hljs-comment">I</span> <span class="hljs-comment">|</span>
+   <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>
+</code></pre><p>很好懂吧？可是，说了这么多，跟buffer有个什么关系呢？别急，我们来看下面一部分。</p>
+<h2 id="why-buffer-">Why：Buffer中的分层思想</h2>
+<p>我们先回到之前的<code>messageReceived</code>方法：</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">messageReceived</span>(
+            ChannelHandlerContext ctx, MessageEvent e) {
+        <span class="hljs-comment">// Send back the received message to the remote peer.</span>
+        transferredBytes.addAndGet(((ChannelBuffer) e.getMessage()).readableBytes());
+        e.getChannel().write(e.getMessage());
+    }
+</code></pre>
+<p>这里<code>MessageEvent.getMessage()</code>默认的返回值是一个<code>ChannelBuffer</code>。我们知道，业务中需要的&quot;Message&quot;，其实是一条应用层级别的完整消息，而一般的buffer工作在传输层，与&quot;Message&quot;是不能对应上的。那么这个ChannelBuffer是什么呢？</p>
+<p>来一个官方给的图，我想这个答案就很明显了：</p>
+<p>![virtual buffer in Netty][3]</p>
+<p>这里可以看到，TCP层HTTP报文被分成了两个ChannelBuffer，这两个Buffer对我们上层的逻辑(HTTP处理)是没有意义的。但是两个ChannelBuffer被组合起来，就成为了一个有意义的HTTP报文，这个报文对应的ChannelBuffer，才是能称之为&quot;Message&quot;的东西。这里用到了一个词&quot;Virtual Buffer&quot;，也就是所谓的&quot;Zero-Copy-Capable Byte Buffer&quot;了。顿时觉得豁然开朗了有没有！</p>
+<p>我这里总结一下，<strong>如果说NIO的Buffer和Netty的ChannelBuffer最大的区别的话，就是前者仅仅是传输上的Buffer，而后者其实是传输Buffer和抽象后的逻辑Buffer的结合。</strong>延伸开来说，NIO仅仅是一个网络传输框架，而Netty是一个网络应用框架，包括网络以及应用的分层结构。</p>
+<p>当然，在Netty里，默认使用<code>ChannelBuffer</code>表示&quot;Message&quot;，不失为一个比较实用的方法，但是<code>MessageEvent.getMessage()</code>是可以存放一个POJO的，这样子抽象程度又高了一些，这个我们在以后讲到<code>ChannelPipeline</code>的时候会说到。</p>
+<h2 id="how-netty-channelbuffer-">How：Netty中的ChannelBuffer及实现</h2>
+<p>好了，终于来到了代码实现部分。之所以啰嗦了这么多，因为我觉得，关于&quot;Zero-Copy-Capable Rich Byte Buffer&quot;，理解为什么需要它，比理解它是怎么实现的，可能要更重要一点。</p>
+<p>我想可能很多朋友跟我一样，喜欢&quot;顺藤摸瓜&quot;式读代码--找到一个入口，然后顺着查看它的调用，直到理解清楚。很幸运，<code>ChannelBuffers</code>(注意有s!)就是这样一根&quot;藤&quot;，它是所有ChannelBuffer实现类的入口，它提供了很多静态的工具方法来创建不同的Buffer，靠“顺藤摸瓜”式读代码方式，大致能把各种ChannelBuffer的实现类摸个遍。先列一下ChannelBuffer相关类图。</p>
+<p>![channel buffer in Netty][1]</p>
+<p>此外还有<code>WrappedChannelBuffer</code>系列也是继承自<code>AbstractChannelBuffer</code>，图放到了后面。</p>
+<h3 id="channelbuffer-readerindex-writerindex">ChannelBuffer中的readerIndex和writerIndex</h3>
+<p>开始以为Netty的ChannelBuffer是对NIO ByteBuffer的一个封装，其实不是的，<strong>它是把ByteBuffer重新实现了一遍</strong>。</p>
+<p>以最常用的<code>HeapChannelBuffer</code>为例，其底层也是一个byte[]，与ByteBuffer不同的是，它是可以同时进行读和写的，而不需要使用flip()进行读写切换。ChannelBuffer读写的核心代码在<code>AbstactChannelBuffer</code>里，这里通过readerIndex和writerIndex两个整数，分别指向当前读的位置和当前写的位置，并且，readerIndex总是小于writerIndex的。贴两段代码，让大家能看的更明白一点：</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">writeByte</span>(<span class="hljs-keyword">int</span> value) {
+        setByte(writerIndex ++, value);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">byte</span> <span class="hljs-title">readByte</span>() {
+        <span class="hljs-keyword">if</span> (readerIndex == writerIndex) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IndexOutOfBoundsException(<span class="hljs-string">"Readable byte limit exceeded: "</span>
+                    + readerIndex);
+        }
+        <span class="hljs-keyword">return</span> getByte(readerIndex ++);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">writableBytes</span>() {
+        <span class="hljs-keyword">return</span> capacity() - writerIndex;
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">readableBytes</span>() {
+        <span class="hljs-keyword">return</span> writerIndex - readerIndex;
+    }
+</code></pre>
+<p>我倒是觉得这样的方式非常自然，比单指针与flip()要更加好理解一些。AbstactChannelBuffer还有两个相应的mark指针<code>markedReaderIndex</code>和<code>markedWriterIndex</code>，跟NIO的原理是一样的，这里不再赘述了。</p>
+<h3 id="-endianness-heapchannelbuffer">字节序Endianness与HeapChannelBuffer</h3>
+<p>在创建Buffer时，我们注意到了这样一个方法：<code>public static ChannelBuffer buffer(ByteOrder endianness, int capacity);</code>，其中<code>ByteOrder</code>是什么意思呢？</p>
+<p>这里有个很基础的概念：字节序(ByteOrder/Endianness)。它规定了多余一个字节的数字(int啊long什么的)，如何在内存中表示。BIG_ENDIAN(大端序)表示高位在前，整型数<code>12</code>会被存储为<code>0 0 0 12</code>四字节，而LITTLE_ENDIAN则正好相反。可能搞C/C++的程序员对这个会比较熟悉，而Javaer则比较陌生一点，因为Java已经把内存给管理好了。但是在网络编程方面，根据协议的不同，不同的字节序也可能会被用到。目前大部分协议还是采用大端序，可参考<a href="http://tools.ietf.org/html/rfc1700" target="_blank">RFC1700</a>。</p>
+<p>了解了这些知识，我们也很容易就知道为什么会有<code>BigEndianHeapChannelBuffer</code>和<code>LittleEndianHeapChannelBuffer</code>了！</p>
+<h3 id="dynamicchannelbuffer">DynamicChannelBuffer</h3>
+<p>DynamicChannelBuffer是一个很方便的Buffer，之所以叫Dynamic是因为它的长度会根据内容的长度来扩充，你可以像使用ArrayList一样，无须关心其容量。实现自动扩容的核心在于<code>ensureWritableBytes</code>方法，算法很简单：在写入前做容量检查，容量不够时，新建一个容量x2的buffer，跟ArrayList的扩容是相同的。贴一段代码吧(为了代码易懂，这里我删掉了一些边界检查，只保留主逻辑)：</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">writeByte</span>(<span class="hljs-keyword">int</span> value) {
+        ensureWritableBytes(<span class="hljs-number">1</span>);
+        <span class="hljs-keyword">super</span>.writeByte(value);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ensureWritableBytes</span>(<span class="hljs-keyword">int</span> minWritableBytes) {
+        <span class="hljs-keyword">if</span> (minWritableBytes &lt;= writableBytes()) {
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-keyword">int</span> newCapacity = capacity();
+        <span class="hljs-keyword">int</span> minNewCapacity = writerIndex() + minWritableBytes;
+        <span class="hljs-keyword">while</span> (newCapacity &lt; minNewCapacity) {
+            newCapacity &lt;&lt;= <span class="hljs-number">1</span>;
+        }
+
+        ChannelBuffer newBuffer = factory().getBuffer(order(), newCapacity);
+        newBuffer.writeBytes(buffer, <span class="hljs-number">0</span>, writerIndex());
+        buffer = newBuffer;
+    }
+</code></pre>
+<h3 id="compositechannelbuffer">CompositeChannelBuffer</h3>
+<p><code>CompositeChannelBuffer</code>是由多个ChannelBuffer组合而成的，可以看做一个整体进行读写。这里有一个技巧：CompositeChannelBuffer并不会开辟新的内存并直接复制所有ChannelBuffer内容，而是直接保存了所有ChannelBuffer的引用，并在子ChannelBuffer里进行读写，从而实现了&quot;Zero-Copy-Capable&quot;了。来段简略版的代码吧：</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CompositeChannelBuffer</span>{</span>
+
+        <span class="hljs-comment">//components保存所有内部ChannelBuffer</span>
+        <span class="hljs-keyword">private</span> ChannelBuffer[] components;
+        <span class="hljs-comment">//indices记录在整个CompositeChannelBuffer中，每个components的起始位置</span>
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span>[] indices;
+        <span class="hljs-comment">//缓存上一次读写的componentId</span>
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> lastAccessedComponentId;
+
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">byte</span> <span class="hljs-title">getByte</span>(<span class="hljs-keyword">int</span> index) {
+            <span class="hljs-comment">//通过indices中记录的位置索引到对应第几个子Buffer</span>
+            <span class="hljs-keyword">int</span> componentId = componentId(index);
+            <span class="hljs-keyword">return</span> components[componentId].getByte(index - indices[componentId]);
+        }
+
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setByte</span>(<span class="hljs-keyword">int</span> index, <span class="hljs-keyword">int</span> value) {
+            <span class="hljs-keyword">int</span> componentId = componentId(index);
+            components[componentId].setByte(index - indices[componentId], value);
+        }
+
+    }
+</code></pre>
+<p>查找componentId的算法再次不作介绍了，大家自己实现起来也不会太难。值得一提的是，基于ChannelBuffer连续读写的特性，使用了顺序查找(而不是二分查找)，并且用<code>lastAccessedComponentId</code>来进行缓存。</p>
+<h3 id="bytebufferbackedchannelbuffer">ByteBufferBackedChannelBuffer</h3>
+<p>前面说ChannelBuffer是自己的实现的，其实只说对了一半。<code>ByteBufferBackedChannelBuffer</code>就是封装了NIO ByteBuffer的类，用于实现堆外内存的Buffer(使用NIO的<code>DirectByteBuffer</code>)。当然，其实它也可以放其他的ByteBuffer的实现类。代码实现就不说了，也没啥可说的。</p>
+<h3 id="wrappedchannelbuffer">WrappedChannelBuffer</h3>
+<p>![virtual buffer in Netty][2]</p>
+<p><code>WrappedChannelBuffer</code>都是几个对已有ChannelBuffer进行包装，完成特定功能的类。代码不贴了，实现都比较简单，列一下功能吧。</p>
+<table>
+    <tr>
+        <td width="100">类名</td>
+        <td width="100">入口</td>
+        <td>功能</td>
+    </tr>
+    <tr>
+        <td width="100">SlicedChannelBuffer</td>
+        <td>ChannelBuffer.slice()<br>
+        ChannelBuffer.slice(int,int)</td>
+        <td>某个ChannelBuffer的一部分</td>
+    </tr>
+    <tr>
+        <td width="100">TruncatedChannelBuffer</td>
+        <td>ChannelBuffer.slice()<br><br>        ChannelBuffer.slice(int,int)</td>
+        <td>某个ChannelBuffer的一部分，
+           可以理解为其实位置为0的SlicedChannelBuffer</td>
+    </tr>
+    <tr>
+        <td width="100">DuplicatedChannelBuffer</td>
+        <td>ChannelBuffer.duplicate()</td>
+        <td>与某个ChannelBuffer使用同样的存储，
+        区别是有自己的index</td>
+    </tr>
+    <tr>
+        <td width="100">ReadOnlyChannelBuffer</td>
+        <td>ChannelBuffers.unmodifiableBuffer(ChannelBuffer)</td>
+        <td>只读，你懂的</td>
+    </tr>
+</table>
+
+<p>可以看到，关于实现方面，Netty 3.7的buffer相关内容还是比较简单的，也没有太多费脑细胞的地方。</p>
+<p>而Netty 4.0之后就不同了。4.0，ChannelBuffer改名ByteBuf，成了单独项目buffer，并且为了性能优化，加入了BufferPool之类的机制，已经变得比较复杂了(本质倒没怎么变)。性能优化是个很复杂的事情，研究源码时，建议先避开这些东西，除非你对算法情有独钟。举个例子，Netty4.0里为了优化，将Map换成了Java 8里6000行的<a href="https://github.com/netty/netty/blob/master/common/src/main/java/io/netty/util/internal/chmv8/ConcurrentHashMapV8.java" target="_blank">ConcurrentHashMapV8</a>，你们感受一下…</p>
+<p>参考资料：</p>
+<ul>
+<li>TCP/IP协议 <a href="http://zh.wikipedia.org/zh-cn/TCP/IP%E5%8D%8F%E8%AE%AE" target="_blank">http://zh.wikipedia.org/zh-cn/TCP/IP%E5%8D%8F%E8%AE%AE</a></li>
+<li>Data_buffer <a href="http://en.wikipedia.org/wiki/Data_buffer" target="_blank">http://en.wikipedia.org/wiki/Data_buffer</a></li>
+<li>Endianness <a href="http://en.wikipedia.org/wiki/Endianness" target="_blank">http://en.wikipedia.org/wiki/Endianness</a></li>
+</ul>
+
+                    
+                    </section>
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../posts/ch1-overview.html" class="navigation navigation-prev"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../posts/ch3-pipeline.html" class="navigation navigation-next"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/mode-javascript.js"></script>
+        <script src="../gitbook/jsrepl/jsrepl.js" id="jsrepl-script"></script>
+        <script src="../gitbook/app.js"></script>
+        
+    </body>
+</html>

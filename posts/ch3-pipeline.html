@@ -1,0 +1,270 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head prefix="og: http://ogp.me/ns# book: http://ogp.me/ns/book#">
+        
+        <meta charset="UTF-8">
+        <title>Channel中的Pipeline | Netty-learning</title>
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="robots" content="index, follow">
+        <meta name="author" content="code4craft">
+        <meta name="description" content="">
+        <meta name="keywords" content="gitbook,github" >
+        <meta name="generator" content="www.gitbook.io">
+
+        
+        <link rel="next" href="../posts/ch4-reactor.html" />
+        
+        
+        <link rel="prev" href="../posts/ch2-buffer.html" />
+        
+
+        <meta property="og:title" content="Channel中的Pipeline | Netty-learning">
+        <meta property="og:site_name" content="Netty-learning">
+        <meta property="og:type" content="book">
+        <meta property="og:locale" content="en_US">
+
+        <meta property="book:author" content="https://github.com/code4craft">
+        <meta property="book:tag" content="GitBook">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+        
+        <link rel="stylesheet" href="../gitbook/style.css">
+        
+        
+    </head>
+    <body>
+        
+<div class="book" data-github="code4craft/netty-learning" data-level="3" data-basepath=".." data-revision="1396882648742">
+    <div class="book-header">
+    <!-- Actions Left -->
+    <a href="https://github.com/code4craft/netty-learning" target="_blank" class="btn pull-left"><i class="fa fa-github-alt"></i></a>
+    <a href="#" class="btn pull-left toggle-summary"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search"><i class="fa fa-search"></i></a>
+
+    <!-- Actions Right -->
+    <a href="#" target="_blank" class="btn pull-right" data-sharing="google-plus"><i class="fa fa-google-plus"></i></a>
+    <a href="#" target="_blank" class="btn pull-right" data-sharing="facebook"><i class="fa fa-facebook"></i></a>
+    <a href="#" target="_blank" class="btn pull-right" data-sharing="twitter"><i class="fa fa-twitter"></i></a>
+
+    <a href="https://github.com/code4craft/netty-learning/stargazers" target="_blank" class="btn pull-right count-star"><i class="fa fa-star-o"></i> Star (<span>-</span>)</a>
+    <a href="https://github.com/code4craft/netty-learning/watchers" target="_blank" class="btn pull-right count-watch"><i class="fa fa-eye"></i> Watch (<span>-</span>)</a>
+
+
+    <!-- Title -->
+    <h1><a href="../" >Netty-learning</a></h1>
+</div>
+
+    <div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Search" class="form-control" />
+    </div>
+    <ul class="summary">
+        <li>
+            <a href="https://github.com/code4craft" target="blank">About the author</a>
+        </li>
+        <li>
+            <a href="https://github.com/code4craft/netty-learning/issues" target="blank">Questions and Issues</a>
+        </li>
+        <li>
+            <a href="https://github.com/code4craft/netty-learning/edit/master/posts/ch3-pipeline.md" target="blank">Edit and Contribute</a>
+        </li>
+        <li class="divider"></li>
+        <li data-level="0" data-path="index.html">
+            <a href="../"><i class="fa fa-check"></i> Introduction</a>
+        </li>
+        
+            <li  data-level="1" data-path="posts/ch1-overview.html">
+                
+                <a href="../posts/ch1-overview.html">
+                    <i class="fa fa-check"></i> <b>1)</b> Netty概述
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="2" data-path="posts/ch2-buffer.html">
+                
+                <a href="../posts/ch2-buffer.html">
+                    <i class="fa fa-check"></i> <b>2)</b> Netty中的buffer
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="3" data-path="posts/ch3-pipeline.html">
+                
+                <a href="../posts/ch3-pipeline.html">
+                    <i class="fa fa-check"></i> <b>3)</b> Channel中的Pipeline
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="4" data-path="posts/ch4-reactor.html">
+                
+                <a href="../posts/ch4-reactor.html">
+                    <i class="fa fa-check"></i> <b>4)</b> Netty与Reactor模式
+                </a>
+                
+                
+            </li>
+        
+            <li  data-level="5" data-path="posts/socks-proxy-by-netty.html">
+                
+                <a href="../posts/socks-proxy-by-netty.html">
+                    <i class="fa fa-check"></i> <b>5)</b> Netty实战:构建一个socks proxy
+                </a>
+                
+                
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body" tabindex="-1">
+        <div class="body-inner">
+            <div class="page-wrapper">
+                <div class="book-progress">
+    <div class="bar">
+        <div class="inner" style="width: 60%;min-width: 40%;"></div>
+    </div>
+    <div class="chapters">
+    
+        <a href="../index.html" title="Introduction" class="chapter done new-chapter" data-progress="0" style="left: 0%;"></a>
+    
+        <a href="../posts/ch1-overview.html" title="Netty概述" class="chapter done new-chapter" data-progress="1" style="left: 20%;"></a>
+    
+        <a href="../posts/ch2-buffer.html" title="Netty中的buffer" class="chapter done new-chapter" data-progress="2" style="left: 40%;"></a>
+    
+        <a href="../posts/ch3-pipeline.html" title="Channel中的Pipeline" class="chapter done new-chapter" data-progress="3" style="left: 60%;"></a>
+    
+        <a href="../posts/ch4-reactor.html" title="Netty与Reactor模式" class="chapter  new-chapter" data-progress="4" style="left: 80%;"></a>
+    
+        <a href="../posts/socks-proxy-by-netty.html" title="Netty实战:构建一个socks proxy" class="chapter  new-chapter" data-progress="5" style="left: 100%;"></a>
+    
+    </div>
+</div>
+
+                <div class="page-inner">
+                
+                    <section class="normal" id="section-gitbook_4">
+                    
+                        <h2 id="netty-channel-pipeline">Netty那点事（三）Channel中的Pipeline</h2>
+<p>Channel是理解和使用Netty的核心。Channel的涉及内容较多，这里我使用由浅入深的介绍方法。在这篇文章中，我们主要介绍Channel部分中Pipeline实现机制。为了避免枯燥，借用一下《盗梦空间》的“梦境”概念，希望大家喜欢。</p>
+<h2 id="-channel-">一层梦境：Channel实现概览</h2>
+<p>在Netty里，<code>Channel</code>是通讯的载体，而<code>ChannelHandler</code>负责Channel中的逻辑处理。</p>
+<p>那么<code>ChannelPipeline</code>是什么呢？我觉得可以理解为ChannelHandler的容器：一个Channel包含一个ChannelPipeline，所有ChannelHandler都会注册到ChannelPipeline中，并按顺序组织起来。</p>
+<p>在Netty中，<code>ChannelEvent</code>是数据或者状态的载体，例如传输的数据对应<code>MessageEvent</code>，状态的改变对应<code>ChannelStateEvent</code>。当对Channel进行操作时，会产生一个ChannelEvent，并发送到<code>ChannelPipeline</code>。ChannelPipeline会选择一个ChannelHandler进行处理。这个ChannelHandler处理之后，可能会产生新的ChannelEvent，并流转到下一个ChannelHandler。</p>
+<p>![channel pipeline][1]</p>
+<p>例如，一个数据最开始是一个<code>MessageEvent</code>，它附带了一个未解码的原始二进制消息<code>ChannelBuffer</code>，然后某个Handler将其解码成了一个数据对象，并生成了一个新的<code>MessageEvent</code>，并传递给下一步进行处理。</p>
+<p>到了这里，可以看到，其实Channel的核心流程位于<code>ChannelPipeline</code>中。于是我们进入ChannelPipeline的深层梦境里，来看看它具体的实现。</p>
+<h2 id="-channelpipeline-">二层梦境：ChannelPipeline的主流程</h2>
+<p>Netty的ChannelPipeline包含两条线路：Upstream和Downstream。Upstream对应上行，接收到的消息、被动的状态改变，都属于Upstream。Downstream则对应下行，发送的消息、主动的状态改变，都属于Downstream。<code>ChannelPipeline</code>接口包含了两个重要的方法:<code>sendUpstream(ChannelEvent e)</code>和<code>sendDownstream(ChannelEvent e)</code>，就分别对应了Upstream和Downstream。</p>
+<p>对应的，ChannelPipeline里包含的ChannelHandler也包含两类：<code>ChannelUpstreamHandler</code>和<code>ChannelDownstreamHandler</code>。每条线路的Handler是互相独立的。它们都很简单的只包含一个方法：<code>ChannelUpstreamHandler.handleUpstream</code>和<code>ChannelDownstreamHandler.handleDownstream</code>。</p>
+<p>Netty官方的javadoc里有一张图(<code>ChannelPipeline</code>接口里)，非常形象的说明了这个机制(我对原图进行了一点修改，加上了<code>ChannelSink</code>，因为我觉得这部分对理解代码流程会有些帮助)：</p>
+<p>![channel pipeline][2]</p>
+<p>什么叫<code>ChannelSink</code>呢？ChannelSink包含一个重要方法<code>ChannelSink.eventSunk</code>，可以接受任意ChannelEvent。&quot;sink&quot;的意思是&quot;下沉&quot;，那么&quot;ChannelSink&quot;好像可以理解为&quot;Channel下沉的地方&quot;？实际上，它的作用确实是这样，也可以换个说法：&quot;处于末尾的万能Handler&quot;。最初读到这里，也有些困惑，这么理解之后，就感觉简单许多。<strong>只有Downstream包含<code>ChannelSink</code></strong>，这里会做一些建立连接、绑定端口等重要操作。为什么UploadStream没有ChannelSink呢？我只能认为，一方面，不符合&quot;sink&quot;的意义，另一方面，也没有什么处理好做的吧！</p>
+<p>这里有个值得注意的地方：在一条“流”里，一个<code>ChannelEvent</code>并不会主动的&quot;流&quot;经所有的Handler，而是由<strong>上一个Handler显式的调用<code>ChannelPipeline.sendUp(Down)stream</code>产生，并交给下一个Handler处理</strong>。也就是说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用<code>sendUp(Down)stream</code>新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。</p>
+<p>顺便说一句，在Netty 3.x里，这个机制会导致大量的ChannelEvent对象创建，因此Netty 4.x版本对此进行了改进。twitter的<a href="https://github.com/twitter/finagle" target="_blank">finagle</a>框架实践中，就提到从Netty 3.x升级到Netty 4.x，可以大大降低GC开销。有兴趣的可以看看这篇文章：<a href="https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead" target="_blank">https://blog.twitter.com/2013/netty-4-at-twitter-reduced-gc-overhead</a></p>
+<p>下面我们从代码层面来对这里面发生的事情进行深入分析，这部分涉及到一些细节，需要打开项目源码，对照来看，会比较有收获。</p>
+<h2 id="-channelpipeline-">三层梦境：深入ChannelPipeline内部</h2>
+<h3 id="defaultchannelpipeline-">DefaultChannelPipeline的内部结构</h3>
+<p><code>ChannelPipeline</code>的主要的实现代码在<code>DefaultChannelPipeline</code>类里。列一下DefaultChannelPipeline的主要字段：</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DefaultChannelPipeline</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">ChannelPipeline</span> {</span>
+
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> Channel channel;
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> ChannelSink sink;
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> DefaultChannelHandlerContext head;
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> DefaultChannelHandlerContext tail;
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Map&lt;String, DefaultChannelHandlerContext&gt; name2ctx =
+            <span class="hljs-keyword">new</span> HashMap&lt;String, DefaultChannelHandlerContext&gt;(<span class="hljs-number">4</span>);
+    }
+</code></pre>
+<p>这里需要介绍一下<code>ChannelHandlerContext</code>这个接口。顾名思义，ChannelHandlerContext保存了Netty与Handler相关的的上下文信息。而咱们这里的<code>DefaultChannelHandlerContext</code>，则是对<code>ChannelHandler</code>的一个包装。一个<code>DefaultChannelHandlerContext</code>内部，除了包含一个<code>ChannelHandler</code>，还保存了&quot;next&quot;和&quot;prev&quot;两个指针，从而形成一个双向链表。</p>
+<p>因此，在<code>DefaultChannelPipeline</code>中，我们看到的是对<code>DefaultChannelHandlerContext</code>的引用，而不是对<code>ChannelHandler</code>的直接引用。这里包含&quot;head&quot;和&quot;tail&quot;两个引用，分别指向链表的头和尾。而name2ctx则是一个按名字索引DefaultChannelHandlerContext用户的一个map，主要在按照名称删除或者添加ChannelHandler时使用。</p>
+<h3 id="sendupstream-senddownstream">sendUpstream和sendDownstream</h3>
+<p>前面提到了，<code>ChannelPipeline</code>接口的两个重要的方法：<code>sendUpstream(ChannelEvent e)</code>和<code>sendDownstream(ChannelEvent e)</code>。<strong>所有事件</strong>的发起都是基于这两个方法进行的。<code>Channels</code>类有一系列<code>fireChannelBound</code>之类的<code>fireXXXX</code>方法，其实都是对这两个方法的facade包装。</p>
+<p>下面来看一下这两个方法的实现。先看sendUpstream(对代码做了一些简化，保留主逻辑)：</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sendUpstream</span>(ChannelEvent e) {
+        DefaultChannelHandlerContext head = getActualUpstreamContext(<span class="hljs-keyword">this</span>.head);
+        head.getHandler().handleUpstream(head, e);
+    }
+
+    <span class="hljs-keyword">private</span> DefaultChannelHandlerContext <span class="hljs-title">getActualUpstreamContext</span>(DefaultChannelHandlerContext ctx) {
+        DefaultChannelHandlerContext realCtx = ctx;
+        <span class="hljs-keyword">while</span> (!realCtx.canHandleUpstream()) {
+            realCtx = realCtx.next;
+            <span class="hljs-keyword">if</span> (realCtx == <span class="hljs-keyword">null</span>) {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
+            }
+        }
+        <span class="hljs-keyword">return</span> realCtx;
+    }
+</code></pre>
+<p>这里最终调用了<code>ChannelUpstreamHandler.handleUpstream</code>来处理这个ChannelEvent。有意思的是，这里我们看不到任何&quot;将Handler向后移一位&quot;的操作，但是我们总不能每次都用同一个Handler来进行处理啊？实际上，我们更为常用的是<code>ChannelHandlerContext.handleUpstream</code>方法(实现是<code>DefaultChannelHandlerContext.sendUpstream</code>方法)：</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sendUpstream</span>(ChannelEvent e) {
+        DefaultChannelHandlerContext next = getActualUpstreamContext(<span class="hljs-keyword">this</span>.next);
+        DefaultChannelPipeline.<span class="hljs-keyword">this</span>.sendUpstream(next, e);
+    }
+</code></pre>
+<p>可以看到，这里最终仍然调用了<code>ChannelPipeline.sendUpstream</code>方法，但是<strong>它会将Handler指针后移</strong>。</p>
+<p>我们接下来看看<code>DefaultChannelHandlerContext.sendDownstream</code>:</p>
+<pre><code class="lang-java">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sendDownstream</span>(ChannelEvent e) {
+        DefaultChannelHandlerContext prev = getActualDownstreamContext(<span class="hljs-keyword">this</span>.prev);
+        <span class="hljs-keyword">if</span> (prev == <span class="hljs-keyword">null</span>) {
+            <span class="hljs-keyword">try</span> {
+                getSink().eventSunk(DefaultChannelPipeline.<span class="hljs-keyword">this</span>, e);
+            } <span class="hljs-keyword">catch</span> (Throwable t) {
+                notifyHandlerException(e, t);
+            }
+        } <span class="hljs-keyword">else</span> {
+            DefaultChannelPipeline.<span class="hljs-keyword">this</span>.sendDownstream(prev, e);
+        }
+    }
+</code></pre>
+<p>与sendUpstream好像不大相同哦？这里有两点：一是到达末尾时，就如梦境二所说，会调用ChannelSink进行处理；二是这里指针是<strong>往前移</strong>的，所以我们知道了：</p>
+<p><strong>UpstreamHandler是从前往后执行的，DownstreamHandler是从后往前执行的。</strong>在ChannelPipeline里添加时需要注意顺序了！</p>
+<p>DefaultChannelPipeline里还有些机制，像添加/删除/替换Handler，以及<code>ChannelPipelineFactory</code>等，比较好理解，就不细说了。</p>
+<h2 id="-pipeline-">回到现实：Pipeline解决的问题</h2>
+<p>好了，深入分析完代码，有点头晕了，我们回到最开始的地方，来想一想，Netty的Pipeline机制解决了什么问题？</p>
+<p>我认为至少有两点：</p>
+<p>一是提供了ChannelHandler的编程模型，基于ChannelHandler开发业务逻辑，基本不需要关心网络通讯方面的事情，专注于编码/解码/逻辑处理就可以了。Handler也是比较方便的开发模式，在很多框架中都有用到。</p>
+<p>二是实现了所谓的&quot;Universal Asynchronous API&quot;。这也是Netty官方标榜的一个功能。用过OIO和NIO的都知道，这两套API风格相差极大，要从一个迁移到另一个成本是很大的。即使是NIO，异步和同步编程差距也很大。而Netty屏蔽了OIO和NIO的API差异，通过Channel提供对外接口，并通过ChannelPipeline将其连接起来，因此替换起来非常简单。</p>
+<p>![universal API][3]</p>
+<p>理清了ChannelPipeline的主流程，我们对Channel部分的大致结构算是弄清楚了。可是到了这里，我们依然对一个连接具体怎么处理没有什么概念，下篇文章，我们会分析一下，在Netty中，捷径如何处理连接的建立、数据的传输这些事情。</p>
+<p>PS: Pipeline这部分拖了两个月，终于写完了。中间写的实在缓慢，写个高质量(至少是自认为吧！)的文章不容易，但是仍不忍心这部分就此烂尾。中间参考了一些优秀的文章，还自己使用netty开发了一些应用。以后这类文章，还是要集中时间来写完好了。</p>
+<p>参考资料：</p>
+<ul>
+<li>Sink <a href="http://en.wikipedia.org/wiki/Sink_\(computing\" target="_blank">http://en.wikipedia.org/wiki/Sink_(computing)</a>)</li>
+</ul>
+
+                    
+                    </section>
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../posts/ch2-buffer.html" class="navigation navigation-prev"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../posts/ch4-reactor.html" class="navigation navigation-next"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/mode-javascript.js"></script>
+        <script src="../gitbook/jsrepl/jsrepl.js" id="jsrepl-script"></script>
+        <script src="../gitbook/app.js"></script>
+        
+    </body>
+</html>
