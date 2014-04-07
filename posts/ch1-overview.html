@@ -40,7 +40,7 @@
     </head>
     <body>
         
-<div class="book" data-github="code4craft/netty-learning" data-level="1" data-basepath=".." data-revision="1396882648742">
+<div class="book" data-github="code4craft/netty-learning" data-level="1" data-basepath=".." data-revision="1396882856970">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="https://github.com/code4craft/netty-learning" target="_blank" class="btn pull-left"><i class="fa fa-github-alt"></i></a>
@@ -216,7 +216,7 @@
 <p>理解Netty的关键点在哪呢？我觉得，除了NIO的相关知识，另一个就是事件驱动的设计思想。什么叫事件驱动？我们回头看看<code>EchoServerHandler</code>的代码，其中的参数：<code>public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)</code>，MessageEvent就是一个事件。这个事件携带了一些信息，例如这里<code>e.getMessage()</code>就是消息的内容，而<code>EchoServerHandler</code>则描述了处理这种事件的方式。一旦某个事件触发，相应的Handler则会被调用，并进行处理。这种事件机制在UI编程里广泛应用，而Netty则将其应用到了网络编程领域。</p>
 <p>在Netty里，所有事件都来自<code>ChannelEvent</code>接口，这些事件涵盖监听端口、建立连接、读写数据等网络通讯的各个阶段。而事件的处理者就是<code>ChannelHandler</code>，这样，不但是业务逻辑，连网络通讯流程中底层的处理，都可以通过实现<code>ChannelHandler</code>来完成了。事实上，Netty内部的连接处理、协议编解码、超时等机制，都是通过handler完成的。当博主弄明白其中的奥妙时，不得不佩服这种设计！</p>
 <p>下图描述了Netty进行事件处理的流程。<code>Channel</code>是连接的通道，是ChannelEvent的产生者，而<code>ChannelPipeline</code>可以理解为ChannelHandler的集合。</p>
-<p>![event driven in Netty][1]</p>
+<p><img src="http://static.oschina.net/uploads/space/2013/0921/174032_18rb_190591.png" alt="event driven in Netty"></p>
 <h2 id="-netty-">合：开启Netty源码之门</h2>
 <p>理解了Netty的事件驱动机制，我们现在可以来研究Netty的各个模块了。Netty的包结构如下：</p>
 <pre><code>org
@@ -231,7 +231,7 @@
         ├── logging 日志
         └── util 工具类</span>
 </code></pre><p>在这里面，<code>channel</code>和<code>handler</code>两部分比较复杂。我们不妨与Netty官方的结构图对照一下，来了解其功能。</p>
-<p>![components in Netty][2]</p>
+<p><img src="http://static.oschina.net/uploads/space/2013/0921/225721_R0w2_190591.png" alt="components in Netty"></p>
 <p>具体的解释可以看这里：<a href="http://netty.io/3.7/guide/#architecture" target="_blank">http://netty.io/3.7/guide/#architecture</a>。图中可以看到，除了之前说到的事件驱动机制之外，Netty的核心功能还包括两部分：</p>
 <ul>
 <li><p>Zero-Copy-Capable Rich Byte Buffer</p>
